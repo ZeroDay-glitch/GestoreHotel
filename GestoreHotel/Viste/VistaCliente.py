@@ -51,4 +51,4 @@ class VistaCliente(QWidget):
         # Inserisci qui la logica per l'aggiornamento della UI
         pass
 
-    #diocane
+    #diocane2
