@@ -6,8 +6,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 
 class Cliente:
-    def __init__(self, codice, codiceFiscale, cognome, dataNascita, documentoValido, email, luogoNascita, nome, telefono,
-                 prenotazioni=None):
+    def __init__(self, codice, codiceFiscale, cognome, dataNascita, documentoValido, email, luogoNascita, nome, telefono, prenotazioni=None):
         self.codice = codice
         self.codiceFiscale = codiceFiscale
         self.cognome = cognome
@@ -29,16 +28,16 @@ class Cliente:
 
     def getInfoCliente(self):
         return {
-            "Codice": self.codice,
-            "Codice Fiscale": self.codiceFiscale,
-            "Cognome": self.cognome,
-            "Data di Nascita": self.dataNascita,
-            "Documento Valido": self.documentoValido,
-            "Email": self.email,
-            "Luogo di Nascita": self.luogoNascita,
-            "Nome": self.nome,
-            "Telefono": self.telefono,
-            "Prenotazioni": self.prenotazioni
+            "codice": self.codice,
+            "codiceFiscale": self.codiceFiscale,
+            "cognome": self.cognome,
+            "dataNascita": self.dataNascita,
+            "documentoValido": self.documentoValido,
+            "email": self.email,
+            "luogoNascita": self.luogoNascita,
+            "nome": self.nome,
+            "telefono": self.telefono,
+            "prenotazioni": self.prenotazioni
         }
 
     def ricercaClienteNomeCognome(self, nome, cognome):
@@ -91,28 +90,24 @@ class Cliente:
             with open(file_path, 'rb') as f:
                 clienti = pickle.load(f)
 
-            # Verifica se il cliente è presente nel dizionario
-            if self.codiceFiscale in clienti:
-                # Aggiorna il cliente corrente nel dizionario
-                clienti[self.codiceFiscale] = self
+            # Stampa di debug per la verifica
+            print(f"Clienti prima dell'aggiornamento: {clienti}")
 
-                # Sovrascrivi l'intero dizionario di clienti nel file
+            if self.codiceFiscale in clienti:
+                clienti[self.codiceFiscale] = self
+                # Aggiungi questa stampa di debug
+                print(f"Cliente modificato: {clienti[self.codiceFiscale].__dict__}")
                 with open(file_path, 'wb') as f:
                     pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
-
                 print("Cliente modificato con successo")
+
+                with open(file_path, 'rb') as f:
+                    clienti_aggiornati = pickle.load(f)
+                    print(f"Clienti dopo l'aggiornamento: {clienti_aggiornati}")
             else:
                 print("Cliente non trovato nel dizionario")
         else:
             print(f"File {file_path} non trovato. Creazione del file...")
-
-            # Crea il file pickle con il cliente corrente
             with open(file_path, 'wb') as f:
                 pickle.dump({self.codiceFiscale: self}, f, pickle.HIGHEST_PROTOCOL)
-
                 print("File creato con successo")
-
-
-
-
-

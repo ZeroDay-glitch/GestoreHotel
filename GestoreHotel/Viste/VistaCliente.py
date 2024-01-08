@@ -11,19 +11,20 @@ class VistaCliente(QWidget):
 
         main_layout = QVBoxLayout()
 
-        # Layout per il nome e cognome
-        header_layout = QVBoxLayout()
+        # Crea l'header_layout come attributo dell'istanza
+        self.header_layout = QVBoxLayout()  # Aggiunta chiave qui
+
         header_label = QLabel(f"{cliente.nome} {cliente.cognome}")
         header_label.setStyleSheet("font-size: 20pt; font-weight: bold;")
-        header_layout.addWidget(header_label)
+        self.header_layout.addWidget(header_label)
 
         # Aggiungi dettagli cliente sotto il nome e cognome
         for key, value in cliente.getInfoCliente().items():
             if key not in ['Nome', 'Cognome']:
                 label = QLabel(f"{key}: {value}")
-                header_layout.addWidget(label)
+                self.header_layout.addWidget(label)
 
-        main_layout.addLayout(header_layout)
+        main_layout.addLayout(self.header_layout)
 
         # Layout per i pulsanti
         buttons_layout = QHBoxLayout()
@@ -47,8 +48,19 @@ class VistaCliente(QWidget):
             self.vista_modifica_cliente.show()
 
     def update_ui(self):
-        # Aggiorna la UI dopo la modifica del cliente
-        # Inserisci qui la logica per l'aggiornamento della UI
-        pass
+        # Rimuove tutti i widget esistenti nel layout contenente i dettagli del cliente
+        for i in reversed(range(self.header_layout.count())):
+            self.header_layout.itemAt(i).widget().setParent(None)
 
-    
+        # Aggiorna il titolo della finestra con il nome e cognome aggiornati
+        self.setWindowTitle(f"Informazioni Cliente - {self.cliente.nome} {self.cliente.cognome}")
+
+        # Aggiorna il layout con i nuovi dettagli del cliente
+        header_label = QLabel(f"{self.cliente.nome} {self.cliente.cognome}")
+        header_label.setStyleSheet("font-size: 20pt; font-weight: bold;")
+        self.header_layout.addWidget(header_label)
+
+        for key, value in self.cliente.getInfoCliente().items():
+            if key not in ['Nome', 'Cognome']:
+                label = QLabel(f"{key}: {value}")
+                self.header_layout.addWidget(label)

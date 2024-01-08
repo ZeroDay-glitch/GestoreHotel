@@ -1,9 +1,8 @@
 from datetime import datetime
 import traceback
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QComboBox, QMessageBox
 
 from Attivita.Cliente import Cliente
-
 
 class VistaInserisciCliente(QWidget):
 
@@ -22,7 +21,7 @@ class VistaInserisciCliente(QWidget):
         self.add_info_text("telefono", "Telefono")
 
         btn_ok = QPushButton("OK")
-        btn_ok.clicked.connect(self.aggiungi_cliente)  # Collega il pulsante al nuovo metodo
+        btn_ok.clicked.connect(self.aggiungi_cliente)
         self.qlines["btn_ok"] = btn_ok
         self.v_layout.addWidget(btn_ok)
 
@@ -31,9 +30,17 @@ class VistaInserisciCliente(QWidget):
 
     def add_info_text(self, nome, label):
         self.v_layout.addWidget(QLabel(label))
-        current_text = QLineEdit(self)
-        self.qlines[nome] = current_text
-        self.v_layout.addWidget(current_text)
+
+        if nome == "documentoValido":
+            documenti_validi = ["Carta d'identità", "Patente"]  # è solo per usare menu a tendina, non ha senso logico
+            combo_box = QComboBox(self)
+            combo_box.addItems(documenti_validi)
+            self.qlines[nome] = combo_box
+            self.v_layout.addWidget(combo_box)
+        else:
+            current_text = QLineEdit(self)
+            self.qlines[nome] = current_text
+            self.v_layout.addWidget(current_text)
 
     def aggiungi_cliente(self):
         try:
@@ -55,31 +62,25 @@ class VistaInserisciCliente(QWidget):
             cognome = self.qlines["cognome"].text()
             codiceFiscale = self.qlines["codiceFiscale"].text()
             dataNascita = datetime.strptime(self.qlines["dataNascita"].text(), "%d/%m/%Y")
-            documentoValido = self.qlines["documentoValido"].text()
+            documento_valido_index = self.qlines["documentoValido"].currentIndex()
+            documento_valido_options = ["Carta d'identità", "Patente"]
+            documento_valido = documento_valido_options[documento_valido_index]
             email = self.qlines["email"].text()
             telefono = int(self.qlines["telefono"].text())
         except ValueError:
             QMessageBox.critical(self, "Errore", "I dati inseriti non sono validi.", QMessageBox.Ok, QMessageBox.Ok)
             return
 
-        # Crea un nuovo cliente
-        nuovo_cliente = Cliente(codice, codiceFiscale, cognome, dataNascita, documentoValido, email, "", nome, telefono)
+        nuovo_cliente = Cliente(codice, codiceFiscale, cognome, dataNascita, documento_valido, email, "", nome, telefono)
 
-        # Debug: Stampa informazioni prima della callback
         print("Prima della callback")
 
         try:
-            # Chiama la callback con il nuovo cliente
             self.callback(nuovo_cliente)
-
-            # Debug: Stampa informazioni dopo la callback
             print("Dopo la callback")
-
-            # Chiudi la finestra dopo l'aggiunta del cliente
             self.close()
 
         except Exception as e:
-            # Debug: Stampa informazioni in caso di errore nella callback
             print(f"Errore durante l'invocazione della callback: {e}")
             traceback.print_exc()
             QMessageBox.critical(self, "Errore", "Si è verificato un errore durante l'aggiunta del cliente.",

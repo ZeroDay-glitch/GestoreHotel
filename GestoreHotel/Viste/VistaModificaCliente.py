@@ -1,6 +1,6 @@
 import datetime
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QComboBox
 import pickle
 import os
 
@@ -17,10 +17,20 @@ class VistaModificaCliente(QWidget):
         for key, value in self.valori_originali.items():
             if key not in ['Nome', 'Cognome', 'Lista Prenotazioni']:
                 label = QLabel(f"{key}:")
-                edit_line = QLineEdit(str(value))
                 layout.addWidget(label)
-                layout.addWidget(edit_line)
-                setattr(self, f"{key}_edit", edit_line)
+
+                if key == "documentoValido":
+                    # Crea un QComboBox per il campo documentoValido
+                    combo_box = QComboBox()
+                    combo_box.addItems(["Carta d'identità", "Patente"])
+                    combo_box.setCurrentText(str(value))
+                    layout.addWidget(combo_box)
+                    setattr(self, f"{key}_edit", combo_box)
+                else:
+                    # Crea un QLineEdit per gli altri campi
+                    edit_line = QLineEdit(str(value))
+                    layout.addWidget(edit_line)
+                    setattr(self, f"{key}_edit", edit_line)
 
         btn_conferma = QPushButton("Conferma Modifiche")
         btn_conferma.clicked.connect(self.conferma_modifiche)
@@ -32,25 +42,28 @@ class VistaModificaCliente(QWidget):
         try:
             for key, value in self.valori_originali.items():
                 if key not in ['Nome', 'Cognome', 'Lista Prenotazioni']:
-                    new_value = getattr(self, f"{key}_edit").text()
+                    widget = getattr(self, f"{key}_edit")
+                    if isinstance(widget, QComboBox):
+                        new_value = widget.currentText()  # Usa currentText per QComboBox
+                    else:
+                        new_value = widget.text()  # Usa text per QLineEdit
 
+                    # Conversione dei tipi di valore, se necessario
                     if isinstance(value, int):
                         setattr(self.cliente, key, int(new_value))
                     elif isinstance(value, datetime.datetime):
-                        # Aggiungi questa condizione per gestire il confronto tra datetime e stringa
                         if new_value < value.strftime("%Y-%m-%d %H:%M:%S"):
                             raise ValueError("La nuova data deve essere maggiore della data originale.")
                         setattr(self.cliente, key, datetime.datetime.strptime(new_value, "%Y-%m-%d %H:%M:%S"))
                     else:
                         setattr(self.cliente, key, new_value)
 
-            # Chiamiamo il nuovo metodo per salvare le modifiche
             self.cliente.modificaCliente()
-
             self.close()
             self.callback()
 
         except ValueError as e:
             QMessageBox.critical(self, "Errore", str(e), QMessageBox.Ok, QMessageBox.Ok)
+
 
 
