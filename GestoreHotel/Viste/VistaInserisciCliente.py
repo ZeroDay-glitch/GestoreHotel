@@ -16,6 +16,7 @@ class VistaInserisciCliente(QWidget):
         self.add_info_text("cognome", "Cognome")
         self.add_info_text("codiceFiscale", "Codice Fiscale")
         self.add_info_text("dataNascita", "Data di Nascita")
+        self.add_info_text("luogoNascita", "Luogo di Nascita")
         self.add_info_text("documentoValido", "Documento Valido")
         self.add_info_text("email", "Email")
         self.add_info_text("telefono", "Telefono")
@@ -62,6 +63,7 @@ class VistaInserisciCliente(QWidget):
             cognome = self.qlines["cognome"].text()
             codiceFiscale = self.qlines["codiceFiscale"].text()
             dataNascita = datetime.strptime(self.qlines["dataNascita"].text(), "%d/%m/%Y")
+            luogoNascita = self.qlines["luogoNascita"].text()
             documento_valido_index = self.qlines["documentoValido"].currentIndex()
             documento_valido_options = ["Carta d'identità", "Patente"]
             documento_valido = documento_valido_options[documento_valido_index]
@@ -71,7 +73,7 @@ class VistaInserisciCliente(QWidget):
             QMessageBox.critical(self, "Errore", "I dati inseriti non sono validi.", QMessageBox.Ok, QMessageBox.Ok)
             return
 
-        nuovo_cliente = Cliente(codice, codiceFiscale, cognome, dataNascita, documento_valido, email, "", nome, telefono)
+        nuovo_cliente = Cliente(codice, codiceFiscale, cognome, dataNascita, documento_valido, email, luogoNascita, nome, telefono)
 
         print("Prima della callback")
 
