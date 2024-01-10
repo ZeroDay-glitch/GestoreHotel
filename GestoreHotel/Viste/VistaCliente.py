@@ -21,6 +21,8 @@ class VistaCliente(QWidget):
         # Aggiungi dettagli cliente sotto il nome e cognome
         for key, value in cliente.getInfoCliente().items():
             if key not in ['Nome', 'Cognome']:
+                if key == 'prenotato':
+                    value = "Sì" if value else "No"
                 label = QLabel(f"{key}: {value}")
                 self.header_layout.addWidget(label)
 
@@ -62,5 +64,7 @@ class VistaCliente(QWidget):
 
         for key, value in self.cliente.getInfoCliente().items():
             if key not in ['Nome', 'Cognome']:
+                if key == 'prenotato':
+                    value = "Sì" if value else "No"
                 label = QLabel(f"{key}: {value}")
                 self.header_layout.addWidget(label)

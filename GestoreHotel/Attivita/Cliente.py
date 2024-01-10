@@ -17,6 +17,7 @@ class Cliente:
         self.nome = nome
         self.telefono = telefono
         self.prenotazioni = prenotazioni if prenotazioni else []
+        self.prenotato = 0
 
         clienti = {}
         if os.path.isfile('Dati/Clienti.pickle'):
@@ -25,6 +26,20 @@ class Cliente:
         clienti[codiceFiscale] = self
         with open('Dati/Clienti.pickle', 'wb') as f:
             pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
+
+    def salva_cliente(self):
+        clienti = self.carica_clienti()
+        clienti[self.codiceFiscale] = self
+        with open('Dati/Clienti.pickle', 'wb') as f:
+            pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
+
+    @staticmethod
+    def carica_clienti():
+        if os.path.isfile('Dati/Clienti.pickle'):
+            with open('Dati/Clienti.pickle', 'rb') as f:
+                return pickle.load(f)
+        else:
+            return {}
 
     def getInfoCliente(self):
         return {
@@ -37,7 +52,8 @@ class Cliente:
             "luogoNascita": self.luogoNascita,
             "nome": self.nome,
             "telefono": self.telefono,
-            "prenotazioni": self.prenotazioni
+            "prenotazioni": self.prenotazioni,
+            "prenotato": self.prenotato  # Aggiunto l'attributo prenotato
         }
 
     def ricercaClienteNomeCognome(self, nome, cognome):

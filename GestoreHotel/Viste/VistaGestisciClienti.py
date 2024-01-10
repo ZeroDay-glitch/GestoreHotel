@@ -55,7 +55,7 @@ class VistaGestisciClienti(QWidget):
             item.setText(nome)
             item.setEditable(False)
             font = item.font()
-            font.setPointSize(18)
+            font.setPointSize(13)
             item.setFont(font)
             listview_model.appendRow(item)
         self.list_view.setModel(listview_model)
@@ -109,3 +109,8 @@ class VistaGestisciClienti(QWidget):
 
             # Aggiorna l'interfaccia utente dopo l'eliminazione
             self.update_ui()
+
+    def get_lista_clienti(self):
+        # Carica e restituisci la lista dei clienti dal tuo file di dati
+        lista_clienti = []  # Sostituisci con il codice per ottenere la lista dei clienti
+        return lista_clienti
