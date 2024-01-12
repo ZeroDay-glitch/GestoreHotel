@@ -6,57 +6,44 @@ from PyQt5.QtWidgets import QMessageBox
 
 
 class Cliente:
-    def __init__(self, codice, codiceFiscale, cognome, dataNascita, documentoValido, email, luogoNascita, nome, telefono, prenotazioni=None):
+    def __init__(self, cellulare, codice, codice_fiscale, cognome, data_nascita, documento, email, luogo_nascita, nome,
+                 note):
+        self.cellulare = cellulare
         self.codice = codice
-        self.codiceFiscale = codiceFiscale
+        self.codice_fiscale = codice_fiscale
         self.cognome = cognome
-        self.dataNascita = dataNascita
-        self.documentoValido = documentoValido
+        self.data_nascita = data_nascita
+        self.documento = documento
         self.email = email
-        self.luogoNascita = luogoNascita
+        self.luogo_nascita = luogo_nascita
         self.nome = nome
-        self.telefono = telefono
-        self.prenotazioni = prenotazioni if prenotazioni else []
-        self.prenotato = 0
+        self.note = note
+        self.prenotazioni = []
 
         clienti = {}
         if os.path.isfile('Dati/Clienti.pickle'):
             with open('Dati/Clienti.pickle', 'rb') as f:
                 clienti = pickle.load(f)
-        clienti[codiceFiscale] = self
+        clienti[codice] = self
         with open('Dati/Clienti.pickle', 'wb') as f:
             pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
 
-    def salva_cliente(self):
-        clienti = self.carica_clienti()
-        clienti[self.codiceFiscale] = self
-        with open('Dati/Clienti.pickle', 'wb') as f:
-            pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
-
-    @staticmethod
-    def carica_clienti():
-        if os.path.isfile('Dati/Clienti.pickle'):
-            with open('Dati/Clienti.pickle', 'rb') as f:
-                return pickle.load(f)
-        else:
-            return {}
-
-    def getInfoCliente(self):
+    def get_info_cliente(self):
         return {
             "codice": self.codice,
-            "codiceFiscale": self.codiceFiscale,
+            "codice_fiscale": self.codice_fiscale,
             "cognome": self.cognome,
-            "dataNascita": self.dataNascita,
-            "documentoValido": self.documentoValido,
+            "data_nascita": self.data_nascita,
+            "documento": self.documento,
             "email": self.email,
-            "luogoNascita": self.luogoNascita,
+            "luogo_nascita": self.luogo_nascita,
             "nome": self.nome,
-            "telefono": self.telefono,
+            "cellulare": self.cellulare,
             "prenotazioni": self.prenotazioni,
-            "prenotato": self.prenotato  # Aggiunto l'attributo prenotato
+            "note": self.note
         }
 
-    def ricercaClienteNomeCognome(self, nome, cognome):
+    def ricerca_cliente_nome_cognome(self, nome, cognome):
         if os.path.isfile('Dati/Clienti.pickle'):
             with open('Dati/Clienti.pickle', 'rb') as f:
                 clienti = dict(pickle.load(f))
@@ -67,7 +54,7 @@ class Cliente:
         else:
             return None
 
-    def ricercaClienteCodice(self, codice):
+    def ricerca_cliente_codice(self, codice):
         if os.path.isfile('Dati/Clienti.pickle'):
             with open('Dati/Clienti.pickle', 'rb') as f:
                 clienti = dict(pickle.load(f))
@@ -78,16 +65,16 @@ class Cliente:
         else:
             return None
 
-    def rimuoviCliente(self):
+    def rimuovi_cliente(self):
         print("Prima della cancellazione")
         if os.path.isfile('Dati/Clienti.pickle'):
             with open('Dati/Clienti.pickle', 'rb') as f:
                 clienti = pickle.load(f)
 
             # Verifica se il cliente è presente nel dizionario
-            if self.codiceFiscale in clienti:
+            if self.codice in clienti:
                 # Rimuovi il cliente corrente dal dizionario
-                del clienti[self.codiceFiscale]
+                del clienti[self.codice]
 
                 # Sovrascrivi l'intero dizionario di clienti nel file
                 with open('Dati/Clienti.pickle', 'wb') as f:
@@ -99,7 +86,7 @@ class Cliente:
         else:
             print("File Dati/Clienti.pickle non trovato")
 
-    def modificaCliente(self):
+    def modifica_cliente(self):
         file_path = 'Dati/Clienti.pickle'
 
         if os.path.isfile(file_path):
@@ -109,10 +96,10 @@ class Cliente:
             # Stampa di debug per la verifica
             print(f"Clienti prima dell'aggiornamento: {clienti}")
 
-            if self.codiceFiscale in clienti:
-                clienti[self.codiceFiscale] = self
+            if self.codice in clienti:
+                clienti[self.codice] = self
                 # Aggiungi questa stampa di debug
-                print(f"Cliente modificato: {clienti[self.codiceFiscale].__dict__}")
+                print(f"Cliente modificato: {clienti[self.codice].__dict__}")
                 with open(file_path, 'wb') as f:
                     pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
                 print("Cliente modificato con successo")
@@ -125,5 +112,5 @@ class Cliente:
         else:
             print(f"File {file_path} non trovato. Creazione del file...")
             with open(file_path, 'wb') as f:
-                pickle.dump({self.codiceFiscale: self}, f, pickle.HIGHEST_PROTOCOL)
+                pickle.dump({self.codice: self}, f, pickle.HIGHEST_PROTOCOL)
                 print("File creato con successo")

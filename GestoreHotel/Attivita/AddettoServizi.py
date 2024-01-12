@@ -5,70 +5,75 @@ from Attivita.Dipendente import Dipendente
 
 
 class AddettoServizi(Dipendente):
-    def __init__(self, codice, codiceFiscale, cognome, dataNascita, email, luogoNascita, nome, telefono,
-                 camere=None):
-        super().__init__(codice, codiceFiscale, cognome, dataNascita, email, luogoNascita, nome, telefono,
-                         mansione="AddettoServizi")
-        self.camere = camere if camere else []
+    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, camere, servizio_in_camera):
+        super().__init__(cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo="addettoServizi")
+        self.camere = camere
+        self.servizio_in_camera = servizio_in_camera
 
-        addettiServizi = {}
-        if os.path.isfile('Dati\AddettoServizi.pickle'):
-            with open('Dati\AddettoServizi.pickle', 'rb') as f:
-                addettiServizi = pickle.load(f)
-        addettiServizi[codice] = self
-        with open('Dati\AddettoServizi.pickle', 'wb') as f:
-            pickle.dump(addettiServizi, f, pickle.HIGHEST_PROTOCOL)
+        addetti = {}
+        if os.path.isfile('Dati/AddettoServizi.pickle'):
+            with open('Dati/AddettoServizi.pickle', 'rb') as f:
+                addetti = pickle.load(f)
+        addetti[codice] = self
+        with open('Dati/AddettoServizi.pickle', 'wb') as f:
+            pickle.dump(addetti, f, pickle.HIGHEST_PROTOCOL)
 
 
-    def getInfoAddettoServizi(self):
-        info = self.getInfoDipendente()
-        info["Camere"] = self.camere
+    def get_info_addetto(self):
+        info = self.get_info_dipendente()
+        info.update({
+            "camere": self.camere,
+            "servizio_in_camera": self.servizio_in_camera
+        })
         return info
 
-    def ricercaDipendenteNomeCognome(self, nome, cognome):
-        if os.path.isfile('Dati\AddettoServizi.pickle'):
-            with open('Dati\AddettoServizi.pickle', 'rb') as f:
-                addettiServizi = dict(pickle.load(f))
-                for addettoServizi in addettiServizi.values():
-                    if addettoServizi.nome == nome and addettoServizi.cognome == cognome:
-                        return addettoServizi
+    def ricerca_dipendente_nome_cognome(self, nome, cognome):
+        if os.path.isfile('Dati/AddettoServizi.pickle'):
+            with open('Dati/AddettoServizi.pickle', 'rb') as f:
+                addetti = dict(pickle.load(f))
+                for addetto in addetti.values():
+                    if addetto.nome == nome and addetto.cognome == cognome:
+                        return addetto
                 return None
         else:
             return None
 
-    def ricercaDipendenteCodice(self, codice):
-        if os.path.isfile('Dati\AddettoServizi.pickle'):
-            with open('Dati\AddettoServizi.pickle', 'rb') as f:
-                addettiServizi = dict(pickle.load(f))
-                try:
-                    return addettiServizi[codice]
-                except:
-                    return None
+    def ricerca_dipendente_codice(self, codice):
+        if os.path.isfile('Dati/AddettoServizi.pickle'):
+            with open('Dati/AddettoServizi.pickle', 'rb') as f:
+                addetti = dict(pickle.load(f))
+                return addetti.get(codice, None)
         else:
             return None
 
-    def ricercaDipendenteCF(self, codiceFiscale):
-        if os.path.isfile('Dati\AddettoServizi.pickle'):
-            with open('Dati\AddettoServizi.pickle', 'rb') as f:
-                addettiServizi = dict(pickle.load(f))
-                for addettoServizi in addettiServizi.values():
-                    if addettoServizi.codiceFiscale == codiceFiscale:
-                        return addettoServizi
-                return None
-        else:
-            return None
+    def modifica_dipendente(self, new_data):
+        try:
+            with open('Dati/AddettoServizi.pickle', 'rb') as f:
+                addetti = pickle.load(f)
 
-    def rimuoviAddettoServizi(self):
-        if os.path.isfile('Dati\AddettoServizi.pickle'):
-            with open('Dati\AddettoServizi.pickle', 'rb') as f:
-                addettiServizi = pickle.load(f)
-                if self.codice in addettiServizi:
-                    del addettiServizi[self.codice]
-                    with open('Dati\AddettoServizi.pickle', 'wb') as f:
-                        pickle.dump(addettiServizi, f, pickle.HIGHEST_PROTOCOL)
+            if self.codice in addetti:
+                addetti[self.codice].__dict__.update(new_data)
 
-        # Chiamare il metodo della classe base per rimuovere il dipendente
-        self.rimuoviDipendente()
-        self.camere = ""
-        del self
+                with open('Dati/AddettoServizi.pickle', 'wb') as f:
+                    pickle.dump(addetti, f, pickle.HIGHEST_PROTOCOL)
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False
 
+    def rimuovi_dipendente(self):
+        try:
+            with open('Dati/AddettoServizi.pickle', 'rb') as f:
+                addetti = pickle.load(f)
+
+            if self.codice in addetti:
+                del addetti[self.codice]
+
+                with open('Dati/AddettoServizi.pickle', 'wb') as f:
+                    pickle.dump(addetti, f, pickle.HIGHEST_PROTOCOL)
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False

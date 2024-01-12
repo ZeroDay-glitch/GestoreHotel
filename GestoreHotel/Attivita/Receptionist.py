@@ -5,10 +5,10 @@ from Attivita.Dipendente import Dipendente
 
 
 class Receptionist(Dipendente):
-    def __init__(self, codice, codiceFiscale, cognome, dataNascita, email, luogoNascita, nome, telefono, lingue=None):
-        super().__init__(codice, codiceFiscale, cognome, dataNascita, email, luogoNascita, nome, telefono,
-                         mansione='Receptionist')
-        self.lingue = lingue if lingue else []
+    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, lingue):
+        super().__init__(cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo="receptionist")
+        self.lingue = lingue
+        self.prenotazioni = []
 
         receptionists = {}
         if os.path.isfile('Dati/Receptionist.pickle'):
@@ -18,12 +18,15 @@ class Receptionist(Dipendente):
         with open('Dati/Receptionist.pickle', 'wb') as f:
             pickle.dump(receptionists, f, pickle.HIGHEST_PROTOCOL)
 
-    def getInfoReceptionist(self):
-        info = self.getInfoDipendente()
-        info['Lingue'] = self.lingue
+    def get_info_receptionist(self):
+        info = self.get_info_dipendente()  # Ottiene le informazioni di base da Dipendente
+        info.update({
+            "lingue": self.lingue,
+            "prenotazioni": self.prenotazioni
+        })
         return info
 
-    def ricercaDipendenteNomeCognome(self, nome, cognome):
+    def ricerca_dipendente_nome_cognome(self, nome, cognome):
         if os.path.isfile('Dati/Receptionist.pickle'):
             with open('Dati/Receptionist.pickle', 'rb') as f:
                 receptionists = dict(pickle.load(f))
@@ -34,7 +37,7 @@ class Receptionist(Dipendente):
         else:
             return None
 
-    def ricercaDipendenteCodice(self, codice):
+    def ricerca_dipendente_codice(self, codice):
         if os.path.isfile('Dati/Receptionist.pickle'):
             with open('Dati/Receptionist.pickle', 'rb') as f:
                 receptionists = dict(pickle.load(f))
@@ -45,27 +48,35 @@ class Receptionist(Dipendente):
         else:
             return None
 
-    def ricercaDipendenteCF(self, codiceFiscale):
-        if os.path.isfile('Dati/Receptionist.pickle'):
-            with open('Dati/Receptionist.pickle', 'rb') as f:
-                receptionists = dict(pickle.load(f))
-                for receptionist in receptionists.values():
-                    if receptionist.codiceFiscale == codiceFiscale:
-                        return receptionist
-                return None
-        else:
-            return None
-
-    def rimuoviReceptionist(self):
-        if os.path.isfile('Dati/Receptionist.pickle'):
+    def modifica_dipendente(self, new_data):
+        try:
             with open('Dati/Receptionist.pickle', 'rb') as f:
                 receptionists = pickle.load(f)
-                if self.codice in receptionists:
-                    del receptionists[self.codice]
-                    with open('Dati/Receptionist.pickle', 'wb') as f:
-                        pickle.dump(receptionists, f, pickle.HIGHEST_PROTOCOL)
 
-        # Chiamare il metodo della classe base per rimuovere il dipendente
-        self.rimuoviDipendente()
-        self.lingue = ""
-        del self
+            if self.codice in receptionists:
+                # Update the receptionist's data with new_data
+                receptionists[self.codice].__dict__.update(new_data)
+
+                with open('Dati/Receptionist.pickle', 'wb') as f:
+                    pickle.dump(receptionists, f, pickle.HIGHEST_PROTOCOL)
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False
+
+    def rimuovi_dipendente(self):
+        try:
+            with open('Dati/Receptionist.pickle', 'rb') as f:
+                receptionists = pickle.load(f)
+
+            if self.codice in receptionists:
+                del receptionists[self.codice]
+
+                with open('Dati/Receptionist.pickle', 'wb') as f:
+                    pickle.dump(receptionists, f, pickle.HIGHEST_PROTOCOL)
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False

@@ -3,48 +3,38 @@ import datetime
 
 
 class Dipendente:
-    def __init__(self, codice, codiceFiscale, cognome, dataNascita, email, luogoNascita, nome, telefono, mansione=None):
+    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo):
+        self.cellulare = cellulare
         self.codice = codice
-        self.codiceFiscale = codiceFiscale
         self.cognome = cognome
-        self.dataNascita = dataNascita
-        self.email = email
-        self.luogoNascita = luogoNascita
+        self.data_nascita = data_nascita
+        self.luogo_nascita = luogo_nascita
         self.nome = nome
-        self.telefono = telefono
-        self.mansione = mansione
+        self.ruolo = ruolo
 
-    def getInfoDipendente(self):
+    def get_info_dipendente(self):
         return {
-            "Nome": self.nome,
-            "Cognome": self.cognome,
-            "CodiceFiscale": self.codiceFiscale,
-            "DataNascita": self.dataNascita,
-            "Email": self.email,
-            "LuogoNascita": self.luogoNascita,
-            "Telefono": self.telefono,
-            "Mansione": self.mansione
+            "codice": self.codice,
+            "cognome": self.cognome,
+            "data_nascita": self.data_nascita,
+            "luogo_nascita": self.luogo_nascita,
+            "nome": self.nome,
+            "cellulare": self.cellulare,
+            "ruolo": self.ruolo
         }
 
     @abstractmethod
-    def ricercaDipendenteNomeCognome(self, nome, cognome):
+    def ricerca_dipendente_nome_cognome(self, nome, cognome):
         pass
 
     @abstractmethod
-    def ricercaDipendenteCodice(self, codice):
+    def ricerca_dipendente_codice(self, codice):
         pass
 
     @abstractmethod
-    def ricercaDipendenteCF(self, codiceFiscale):
+    def modifica_dipendente(self, new_data):
         pass
 
-    def rimuoviDipendente(self):
-        self.codice = -1
-        self.codiceFiscale = ""
-        self.cognome = ""
-        self.dataNascita = datetime.datetime(1900, 1, 1)
-        self.email = ""
-        self.luogoNascita = ""
-        self.nome = ""
-        self.telefono = 0
-        self.mansione = ""
+    @abstractmethod
+    def rimuovi_dipendente(self):
+        pass
