@@ -2,34 +2,54 @@ import datetime
 import pickle
 import os.path
 
+
 class Ricevuta:
-    def __init__(self, assegnamento, costoTotale, dataEmissione=None):
+    def __init__(self, assegnamento, data_emissione, costo_totale):
         self.assegnamento = assegnamento
-        self.costoTotale = costoTotale
-        self.dataEmissione = dataEmissione if dataEmissione else datetime.datetime.now()
+        self.data_emissione = data_emissione
+        self.costo_totale = costo_totale
 
         ricevute = {}
-        if os.path.isfile('Dati\Ricevute.pickle'):
-            with open('Dati\Ricevute.pickle', 'rb') as f:
+        if os.path.isfile('Dati/Ricevute.pickle'):
+            with open('Dati/Ricevute.pickle', 'rb') as f:
                 ricevute = pickle.load(f)
-        ricevute[self.assegnamento] = self
-        with open('Dati\Ricevute.pickle', 'wb') as f:
+        ricevute[data_emissione] = self  # Assuming data_emissione is unique for each receipt
+        with open('Dati/Ricevute.pickle', 'wb') as f:
             pickle.dump(ricevute, f, pickle.HIGHEST_PROTOCOL)
 
-    def getInfoRicevuta(self):
+    def get_info_ricevuta(self):
         return {
-            "CodiceAssegnamento": self.assegnamento,
-            "CostoTotale": self.costoTotale,
-            "DataEmissione": self.dataEmissione
+            "assegnamento": self.assegnamento,
+            "data_emissione": self.data_emissione,
+            "costo_totale": self.costo_totale
         }
 
-    def eliminaRicevuta(self):
-        if os.path.isfile('Dati\Ricevute.pickle'):
-            with open('Dati\Ricevute.pickle', 'wb+') as f:
-                ricevute = dict(pickle.load(f))
-                del ricevute[self.assegnamento.codice]
-                pickle.dump(ricevute, f, pickle.HIGHEST_PROTOCOL)
-        self.costoTotale = 0.0
-        self.dataEmissione = None
-        self.assegnamento = None
-        del self
+    def modifica_ricevuta(self, new_data):
+        try:
+            with open('Dati/Ricevute.pickle', 'rb') as f:
+                ricevute = pickle.load(f)
+
+            if self.data_emissione in ricevute:
+                ricevute[self.data_emissione].__dict__.update(new_data)
+                with open('Dati/Ricevute.pickle', 'wb') as f:
+                    pickle.dump(ricevute, f, pickle.HIGHEST_PROTOCOL)
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False
+
+    def elimina_ricevuta(self):
+        try:
+            with open('Dati/Ricevute.pickle', 'rb') as f:
+                ricevute = pickle.load(f)
+
+            if self.data_emissione in ricevute:
+                del ricevute[self.data_emissione]
+                with open('Dati/Ricevute.pickle', 'wb') as f:
+                    pickle.dump(ricevute, f, pickle.HIGHEST_PROTOCOL)
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False

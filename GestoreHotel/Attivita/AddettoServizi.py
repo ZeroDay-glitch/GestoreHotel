@@ -5,9 +5,9 @@ from Attivita.Dipendente import Dipendente
 
 
 class AddettoServizi(Dipendente):
-    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, camere, servizio_in_camera):
+    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, camera, servizio_in_camera):
         super().__init__(cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo="addettoServizi")
-        self.camere = camere
+        self.camera = camera
         self.servizio_in_camera = servizio_in_camera
 
         addetti = {}
@@ -22,7 +22,7 @@ class AddettoServizi(Dipendente):
     def get_info_addetto(self):
         info = self.get_info_dipendente()
         info.update({
-            "camere": self.camere,
+            "camera": self.camera,
             "servizio_in_camera": self.servizio_in_camera
         })
         return info

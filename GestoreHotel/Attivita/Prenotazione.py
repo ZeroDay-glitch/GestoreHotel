@@ -4,21 +4,14 @@ import datetime
 
 
 class Prenotazione:
-    def __init__(self, cliente, codice, dataInizio, dataEmissione, dataScadenza, numeroOspiti, statoPrenotazione,
-                 caparraVersata, servizioCamera, parcheggio, receptionist):
+    def __init__(self, cliente, codice, data_ora_inizio, data_ora_fine, numero_ospiti, receptionist, servizio):
         self.cliente = cliente
         self.codice = codice
-        self.dataInizio = dataInizio
-        self.dataEmissione = dataEmissione
-        self.dataScadenza = dataScadenza
-        self.numeroOspiti = numeroOspiti
-        self.statoPrenotazione = statoPrenotazione
-        self.caparraVersata = caparraVersata
-        self.servizioCamera = servizioCamera
-        self.parcheggio = parcheggio
+        self.data_ora_inizio = data_ora_inizio
+        self.data_ora_fine = data_ora_fine
+        self.numero_ospiti = numero_ospiti
         self.receptionist = receptionist
-        self.cliente.prenotato = 1
-        self.cliente.salva_cliente()
+        self.servizio = servizio
 
         prenotazioni = {}
         if os.path.isfile('Dati/Prenotazioni.pickle'):
@@ -28,64 +21,49 @@ class Prenotazione:
         with open('Dati/Prenotazioni.pickle', 'wb') as f:
             pickle.dump(prenotazioni, f, pickle.HIGHEST_PROTOCOL)
 
-    def getInfoPrenotazione(self):
+    def get_info_prenotazione(self):
         return {
-            "cliente": self.cliente.getInfoCliente(),
+            "cliente": self.cliente,
             "codice": self.codice,
-            "dataInizio": self.dataInizio,
-            "dataEmissione": self.dataEmissione,
-            "dataScadenza": self.dataScadenza,
-            "numeroOspiti": self.numeroOspiti,
-            "statoPrenotazione": self.statoPrenotazione,
-            "caparraVersata": self.caparraVersata,
-            "ServizioCamera": self.servizioCamera,
-            "parcheggio": self.parcheggio,
-            "receotionist": self.receptionist
+            "data_ora_inizio": self.data_ora_inizio,
+            "data_ora_fine": self.data_ora_fine,
+            "numero_ospiti": self.numero_ospiti,
+            "receptionist": self.receptionist,
+            "servizio": self.servizio
         }
 
-    def ricercaPrenotazione(self, codice):
-        if os.path.isfile('Dati/Prenotazioni.pickle'):
+    def modifica_prenotazione(self, new_data):
+        try:
             with open('Dati/Prenotazioni.pickle', 'rb') as f:
                 prenotazioni = pickle.load(f)
-                if codice in prenotazioni:
-                    return prenotazioni[codice]
-                else:
-                    print(f"Prenotazione con codice {codice} non trovata.")
-                    return None
-        else:
-            print("File Dati/Prenotazioni.pickle non trovato.")
-            return None
 
-    def rimuoviPrenotazione(self):
-        if os.path.isfile('Dati/Prenotazioni.pickle'):
+            if self.codice in prenotazioni:
+                prenotazioni[self.codice].__dict__.update(new_data)
+                with open('Dati/Prenotazioni.pickle', 'wb') as f:
+                    pickle.dump(prenotazioni, f, pickle.HIGHEST_PROTOCOL)
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False
+
+    def elimina_prenotazione(self):
+        try:
             with open('Dati/Prenotazioni.pickle', 'rb') as f:
                 prenotazioni = pickle.load(f)
 
             if self.codice in prenotazioni:
                 del prenotazioni[self.codice]
-
-                # Sovrascrivi l'intero dizionario di prenotazioni nel file
                 with open('Dati/Prenotazioni.pickle', 'wb') as f:
                     pickle.dump(prenotazioni, f, pickle.HIGHEST_PROTOCOL)
-
-                print(f"Prenotazione con codice {self.codice} rimossa con successo.")
-
-                self.cliente.prenotato = 0
-                self.cliente.salva_cliente()
+                return True
             else:
-                print(f"Prenotazione con codice {self.codice} non trovata nel dizionario.")
-
-        else:
-            print("File Dati/Prenotazioni.pickle non trovato.")
-
-        # Ora elimina l'istanza della prenotazione
-        del self
+                return False
+        except FileNotFoundError:
+            return False
 
 
     def verificaScadenza(self):
-        if datetime.datetime.now() > self.dataScadenza:
-            # Aggiorna lo stato 'prenotato' del cliente se la prenotazione è scaduta
-            self.cliente.prenotato = 0
-            self.cliente.salva_cliente()
+        if datetime.datetime.now() > self.data_ora_fine:
             return True
         return False

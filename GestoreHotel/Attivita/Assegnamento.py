@@ -4,50 +4,63 @@ import datetime
 
 
 class Assegnamento:
-    def __init__(self, prenotazione, dataInizio, dataScadenza, servizio):
-        self.codice = prenotazione.codice
-        self.prenotazione = prenotazione
-        self.dataInizio = dataInizio
-        self.dataScadenza = dataScadenza
+    def __init__(self, cliente, codice, data_ora_inizio, data_ora_fine, servizio, camera):
+        self.cliente = cliente
+        self.codice = codice
+        self.data_ora_inizio = data_ora_inizio
+        self.data_ora_fine = data_ora_fine
         self.servizio = servizio
+        self.camera = camera
 
         assegnamenti = {}
-        if os.path.isfile('Dati\Assegnamenti.pickle'):
-            with open('Dati\Assegnamenti.pickle', 'rb') as f:
+        if os.path.isfile('Dati/Assegnamenti.pickle'):
+            with open('Dati/Assegnamenti.pickle', 'rb') as f:
                 assegnamenti = pickle.load(f)
-        assegnamenti[prenotazione.codice] = self
-        with open('Dati\Assegnamenti.pickle', 'wb') as f:
+        assegnamenti[codice] = self
+        with open('Dati/Assegnamenti.pickle', 'wb') as f:
             pickle.dump(assegnamenti, f, pickle.HIGHEST_PROTOCOL)
 
-    def getInfoAssegnamento(self):
+    def get_info_assegnamento(self):
         return {
-            "Codice": self.prenotazione.codice,
-            "Prenotazione": self.prenotazione,
-            "Data di Inizio": self.dataInizio,
-            "Data di Scadenza": self.dataScadenza,
-            "Servizio": self.servizio
+            "cliente": self.cliente,
+            "codice": self.codice,
+            "data_ora_inizio": self.data_ora_inizio,
+            "data_ora_fine": self.data_ora_fine,
+            "servizio": self.servizio,
+            "camera": self.camera
         }
 
-    def ricercaAssegnamento(self, codice):
-        if os.path.isfile('Dati\Assegnamenti.pickle'):
-            with open('Dati\Assegnamenti.pickle', 'rb') as f:
+    def modifica_assegnamento(self, new_data):
+        try:
+            with open('Dati/Assegnamenti.pickle', 'rb') as f:
                 assegnamenti = pickle.load(f)
-                return assegnamenti[codice]
-        else:
-            return None
 
-    def rimuoviAssegnamento(self):
-        if os.path.isfile('Dati\Assegnamenti.pickle'):
-            with open('Dati\Assegnamenti.pickle', 'wb+') as f:
+            if self.codice in assegnamenti:
+                assegnamenti[self.codice].__dict__.update(new_data)
+                with open('Dati/Assegnamenti.pickle', 'wb') as f:
+                    pickle.dump(assegnamenti, f, pickle.HIGHEST_PROTOCOL)
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False
+
+    def elimina_assegnamento(self):
+        try:
+            with open('Dati/Assegnamenti.pickle', 'rb') as f:
                 assegnamenti = pickle.load(f)
-                del assegnamenti[self.prenotazione.codice]
-                pickle.dump(assegnamenti, f, pickle.HIGHEST_PROTOCOL)
-        self.codice = None
-        self.prenotazione = None
-        self.dataInizio = None
-        self.dataScadenza = None
-        self.servizio = None
-        del self
 
-    def verificaScadenza(self):
-        return datetime.datetime.now() > self.dataScadenza
+            if self.codice in assegnamenti:
+                del assegnamenti[self.codice]
+                with open('Dati/Assegnamenti.pickle', 'wb') as f:
+                    pickle.dump(assegnamenti, f, pickle.HIGHEST_PROTOCOL)
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False
+
+    def verifica_scadenza(self):
+        if datetime.datetime.now() > self.data_ora_fine:
+            return True
+        return False
