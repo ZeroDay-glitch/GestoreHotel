@@ -1,38 +1,70 @@
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy, QListWidget, QSpacerItem, QLabel
+import os
+import pickle
+
+from PyQt5.QtGui import QFont, QStandardItemModel, QStandardItem
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy, QListWidget, QSpacerItem, QLabel, QListView, \
+    QMessageBox
+
+from Viste.VistaAggiungiReceptionist import VistaAggiungiReceptionist
+from Viste.VistaReceptionist import VistaReceptionist
+
 
 class VistaGestioneReceptionist(QWidget):
 
     def __init__(self, parent=None):
         super(VistaGestioneReceptionist, self).__init__(parent)
-        layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
 
         # Pulsanti per gestire i receptionist
-        layout.addWidget(self.get_generic_button("AGGIUNGI", self.aggiungi_receptionist, 12))
-        layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
-        layout.addWidget(self.get_generic_button("APRI", self.apri_receptionist, 12))
-        layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
-        layout.addWidget(self.get_generic_button("RIMUOVI", self.rimuovi_receptionist, 12))
-        layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        self.layout.addWidget(self.get_generic_button("AGGIUNGI", lambda: self.aggiungi_receptionist(self.update_ui), 12))
+        self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        self.layout.addWidget(self.get_generic_button("APRI", self.apri_receptionist, 12))
+        self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        self.layout.addWidget(self.get_generic_button("RIMUOVI", self.rimuovi_receptionist, 12))
+        self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
         # Etichetta per separare i pulsanti dalla lista
-        label = QLabel("Lista Receptionist")
-        layout.addWidget(label)
+        label = QLabel("Lista Receptionists")
+        self.layout.addWidget(label)
 
         # Lista dei receptionist
-        self.lista_receptionist = QListWidget()
-        layout.addWidget(self.lista_receptionist)
+        self.lista_receptionist = QListView()
+        self.layout.addWidget(self.lista_receptionist)
+        self.update_ui()
 
         # Spazio vuoto per distanziare
-        layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
         # Pulsante "Annulla" per tornare indietro
-        layout.addWidget(self.get_generic_button("Annulla", self.close, 12))
+        self.layout.addWidget(self.get_generic_button("Annulla", self.close, 12))
 
-        self.setLayout(layout)
+        self.setLayout(self.layout)
         self.setWindowTitle("Gestione Receptionist")
         self.resize(400, 300)
         self.setStyleSheet("background-color: lightgreen;")
+
+
+    def load_receptionists(self):
+        if os.path.isfile('Dati/Receptionist.pickle'):
+            with open('Dati/Receptionist.pickle', 'rb') as f:
+                current = dict(pickle.load(f))
+                self.receptionists.extend(current.values())
+
+    def update_ui(self):
+        # Carica l'elenco dei receptionist e aggiorna la lista
+        self.receptionists = [] # Carica qui i dati dei receptionist
+        self.load_receptionists()
+        listview_model = QStandardItemModel(self.lista_receptionist)
+        for receptionist in self.receptionists:
+            item = QStandardItem()
+            # Modifica questa riga per visualizzare i dettagli del receptionist
+            item.setText(f"{receptionist.nome} {receptionist.cognome}")
+            item.setEditable(False)
+            font = item.font()
+            font.setPointSize(10)
+            item.setFont(font)
+            listview_model.appendRow(item)
+        self.lista_receptionist.setModel(listview_model)
 
     def get_generic_button(self, titolo, on_click, font_size=None):
         button = QPushButton(titolo)
@@ -58,14 +90,37 @@ class VistaGestioneReceptionist(QWidget):
 
         return button
 
-    def aggiungi_receptionist(self):
-        # Funzione da implementare per aggiungere un nuovo receptionist alla lista
-        pass
+    def aggiungi_receptionist(self, callback=None):
+        self.vista_aggiungi_receptionist = VistaAggiungiReceptionist(callback=self.update_ui )
+        self.vista_aggiungi_receptionist.show()
 
     def apri_receptionist(self):
-        # Funzione da implementare per aprire il receptionist selezionato
-        pass
+        try:
+            selected_index = self.lista_receptionist.selectedIndexes()[0]
+            if selected_index.isValid():
+                # Ottieni il receptionist selezionato dalla lista
+                selected_receptionist = self.receptionists[selected_index.row()]
+
+                # Chiamata alla VistaReceptionist per visualizzare le informazioni del receptionist
+                self.vista_receptionist = VistaReceptionist(selected_receptionist)
+                self.vista_receptionist.show()
+        except IndexError:
+            print("INDEX ERROR")
 
     def rimuovi_receptionist(self):
-        # Funzione da implementare per rimuovere il receptionist selezionato
-        pass
+        # Ottieni l'indice dell'elemento selezionato nella lista dei receptionist
+        selected_index = self.lista_receptionist.selectedIndexes()[0]
+
+        if selected_index.isValid():
+            # Identifica il receptionist corrispondente all'elemento selezionato
+            selected_receptionist = self.receptionists[selected_index.row()]
+
+            # Rimuovi il receptionist dai dati su disco
+            if selected_receptionist:
+                if selected_receptionist.rimuovi_dipendente():
+                    # Rimozione riuscita, aggiorna l'interfaccia utente
+                    self.update_ui()
+                else:
+                    # Rimozione fallita, mostra un messaggio di errore
+                    QMessageBox.critical(self, 'Errore', 'Impossibile rimuovere il receptionist.', QMessageBox.Ok,
+                                         QMessageBox.Ok)

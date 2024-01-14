@@ -1,5 +1,7 @@
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QGridLayout, QPushButton, QSizePolicy
+
+from Viste.VistaGestioneClienti import VistaGestioneClienti
 from Viste.VistaGestioneDipendenti import VistaGestioneDipendenti
 
 class VistaHome(QWidget):
@@ -49,7 +51,8 @@ class VistaHome(QWidget):
         pass
 
     def go_clienti(self):
-        pass
+        self.vista_clienti = VistaGestioneClienti()
+        self.vista_clienti.show()
 
     def go_dipendenti(self):
         self.vista_dipendenti = VistaGestioneDipendenti()

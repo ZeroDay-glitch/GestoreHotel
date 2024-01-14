@@ -1,6 +1,7 @@
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy
 
+from Viste.VistaGestioneAddettoServizi import VistaGestioneAddettoServizi
 from Viste.VistaGestioneReceptionist import VistaGestioneReceptionist
 
 
@@ -51,5 +52,5 @@ class VistaGestioneDipendenti(QWidget):
         self.vista_receptionist.show()
 
     def seleziona_addetto_servizi(self):
-        # Funzione da implementare per la gestione degli addetti ai servizi
-        pass
+        self.vista_addetto_servizi = VistaGestioneAddettoServizi()
+        self.vista_addetto_servizi.show()
