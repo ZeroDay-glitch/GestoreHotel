@@ -26,7 +26,7 @@ class VistaModificaReceptionist(QDialog):
         v_layout.addWidget(btn_salva)
 
         self.setWindowTitle("Modifica Receptionist")
-        self.setStyleSheet("background-color: lightblue;")
+        self.setStyleSheet("background-color: lightgreen;")
 
     def add_info_text(self, nome, label, valore_iniziale=""):
         v_layout = self.layout()  # Otteniamo il layout corrente della vista

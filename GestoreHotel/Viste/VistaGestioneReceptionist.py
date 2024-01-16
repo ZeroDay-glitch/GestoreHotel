@@ -2,7 +2,7 @@ import os
 import pickle
 
 from PyQt5.QtGui import QFont, QStandardItemModel, QStandardItem
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy, QListWidget, QSpacerItem, QLabel, QListView, \
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy, QSpacerItem, QLabel, QListView, \
     QMessageBox
 
 from Viste.VistaAggiungiReceptionist import VistaAggiungiReceptionist
@@ -91,7 +91,7 @@ class VistaGestioneReceptionist(QWidget):
         return button
 
     def aggiungi_receptionist(self, callback=None):
-        self.vista_aggiungi_receptionist = VistaAggiungiReceptionist(callback=self.update_ui )
+        self.vista_aggiungi_receptionist = VistaAggiungiReceptionist(callback=self.update_ui)
         self.vista_aggiungi_receptionist.show()
 
     def apri_receptionist(self):

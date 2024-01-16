@@ -19,7 +19,7 @@ class AddettoServizi(Dipendente):
             pickle.dump(addetti, f, pickle.HIGHEST_PROTOCOL)
 
 
-    def get_info_addetto(self):
+    def get_info_addetto_servizi(self):
         info = self.get_info_dipendente()
         info.update({
             "camera": self.camera,

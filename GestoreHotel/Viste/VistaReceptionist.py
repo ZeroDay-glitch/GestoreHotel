@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton
 from Attivita.Receptionist import Receptionist
-from Viste.VistaModificaReceptionist import VistaModificaReceptionist   # Assicurati di importare la classe VistaModificaReceptionist
+from Viste.VistaModificaReceptionist import VistaModificaReceptionist
+
 
 class VistaReceptionist(QWidget):
     def __init__(self, receptionist, modifica_callback=None):
@@ -27,12 +28,8 @@ class VistaReceptionist(QWidget):
         v_layout.addWidget(QLabel(f"Cellulare: {info['cellulare']}"))
         v_layout.addWidget(QLabel(f"Lingue: {', '.join(info['lingue'])}"))
 
-        # Aggiungi altre informazioni specifiche del receptionist qui
-        # Ad esempio, le prenotazioni o altre informazioni aggiuntive
-
         v_layout.addItem(QSpacerItem(30, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
-        # Sostituisci il pulsante "Elimina" con un pulsante "Modifica"
         btn_modifica = QPushButton('MODIFICA')
         btn_modifica.clicked.connect(self.modifica_receptionist)
         btn_modifica.setStyleSheet("""
