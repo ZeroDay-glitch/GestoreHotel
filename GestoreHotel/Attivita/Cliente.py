@@ -81,36 +81,24 @@ class Cliente:
                     pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
 
                 print("Cliente rimosso con successo")
+                return True
             else:
                 print("Cliente non trovato nel dizionario")
         else:
             print("File Dati/Clienti.pickle non trovato")
 
-    def modifica_cliente(self):
-        file_path = 'Dati/Clienti.pickle'
-
-        if os.path.isfile(file_path):
-            with open(file_path, 'rb') as f:
+    def modifica_cliente(self, new_data):
+        try:
+            with open('Dati/Clienti.pickle', 'rb') as f:
                 clienti = pickle.load(f)
 
-            # Stampa di debug per la verifica
-            print(f"Clienti prima dell'aggiornamento: {clienti}")
-
             if self.codice in clienti:
-                clienti[self.codice] = self
-                # Aggiungi questa stampa di debug
-                print(f"Cliente modificato: {clienti[self.codice].__dict__}")
-                with open(file_path, 'wb') as f:
-                    pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
-                print("Cliente modificato con successo")
+                clienti[self.codice].__dict__.update(new_data)
 
-                with open(file_path, 'rb') as f:
-                    clienti_aggiornati = pickle.load(f)
-                    print(f"Clienti dopo l'aggiornamento: {clienti_aggiornati}")
+                with open('Dati/Clienti.pickle', 'wb') as f:
+                    pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
+                return True
             else:
-                print("Cliente non trovato nel dizionario")
-        else:
-            print(f"File {file_path} non trovato. Creazione del file...")
-            with open(file_path, 'wb') as f:
-                pickle.dump({self.codice: self}, f, pickle.HIGHEST_PROTOCOL)
-                print("File creato con successo")
+                return False
+        except FileNotFoundError:
+            return False
