@@ -60,14 +60,10 @@ class VistaModificaReceptionist(QDialog):
 
         # Chiama il metodo per sovrascrivere i dati del receptionist
         success = self.receptionist.modifica_dipendente(new_data)
-
         if success:
-            # Modifica avvenuta con successo, chiudi la finestra
             self.accept()
-
-            # Chiamata alla funzione di callback solo se self.vista_receptionist non è None
-            if self.vista_receptionist is not None and self.vista_receptionist.modifica_callback is not None:
-                self.vista_receptionist.modifica_callback()
+            if self.callback:
+                self.callback()
         else:
             # Gestisci il caso in cui la modifica non sia riuscita
             # Mostra un messaggio di errore o fai altro in base alle tue esigenze

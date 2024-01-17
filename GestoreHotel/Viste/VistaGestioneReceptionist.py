@@ -98,14 +98,12 @@ class VistaGestioneReceptionist(QWidget):
         try:
             selected_index = self.lista_receptionist.selectedIndexes()[0]
             if selected_index.isValid():
-                # Ottieni il receptionist selezionato dalla lista
                 selected_receptionist = self.receptionists[selected_index.row()]
-
-                # Chiamata alla VistaReceptionist per visualizzare le informazioni del receptionist
-                self.vista_receptionist = VistaReceptionist(selected_receptionist)
+                self.vista_receptionist = VistaReceptionist(selected_receptionist, modifica_callback=self.update_ui)
                 self.vista_receptionist.show()
         except IndexError:
             print("INDEX ERROR")
+
 
     def rimuovi_receptionist(self):
         # Ottieni l'indice dell'elemento selezionato nella lista dei receptionist

@@ -54,7 +54,6 @@ class Receptionist(Dipendente):
                 receptionists = pickle.load(f)
 
             if self.codice in receptionists:
-                # Update the receptionist's data with new_data
                 receptionists[self.codice].__dict__.update(new_data)
 
                 with open('Dati/Receptionist.pickle', 'wb') as f:

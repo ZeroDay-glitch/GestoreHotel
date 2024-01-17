@@ -95,11 +95,8 @@ class VistaGestioneAddettoServizi(QWidget):
         try:
             selected_index = self.lista_addetto_servizi.selectedIndexes()[0]
             if selected_index.isValid():
-                # Ottieni il receptionist selezionato dalla lista
                 selected_addetto_servizi = self.addetti_servizi[selected_index.row()]
-
-                # Chiamata alla VistaReceptionist per visualizzare le informazioni del receptionist
-                self.vista_addetto_servizi = VistaAddettoServizi(selected_addetto_servizi)
+                self.vista_addetto_servizi = VistaAddettoServizi(selected_addetto_servizi, modifica_callback=self.update_ui)
                 self.vista_addetto_servizi.show()
         except IndexError:
             print("INDEX ERROR")
