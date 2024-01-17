@@ -8,6 +8,7 @@ class Camera:
         self.num_posti_letto = num_posti_letto
         self.prezzo = prezzo
         self.stato_camera = stato_camera
+        self.prenotazione = None  # Inizialmente non c'è prenotazione associata
 
         camere = {}
         if os.path.isfile('Dati/Camere.pickle'):
@@ -23,7 +24,8 @@ class Camera:
             "tipo_camera": self.tipo_camera,
             "num_posti_letto": self.num_posti_letto,
             "prezzo": self.prezzo,
-            "stato_camera": self.stato_camera
+            "stato_camera": self.stato_camera,
+            "prenotazione": self.prenotazione
         }
 
     def modifica_stato_camera(self, nuovo_stato):
