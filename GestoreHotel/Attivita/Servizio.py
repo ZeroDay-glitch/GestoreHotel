@@ -1,5 +1,6 @@
 from abc import abstractmethod
 
+
 class Servizio:
     def __init__(self, tipo_servizio, costo_servizio):
         self.tipo_servizio = tipo_servizio
@@ -13,8 +14,8 @@ class Servizio:
         }
 
     @abstractmethod
-    def calcola_costo(self):
-        # Implementa il calcolo del costo del servizio in base a regole specifiche
+    def ricerca_servizio(self):
+        # Ricerca il servizio
         pass
 
     @abstractmethod

@@ -10,34 +10,37 @@ class Parcheggio(Servizio):
         self.posti_disponibili = posti_disponibili
         self.tariffa_oraria = tariffa_oraria
 
-        parcheggi = {}
+        # Carica i parcheggi esistenti, aggiungi questo parcheggio e salva
+        parcheggi = self.carica_parcheggi()
+        parcheggi[self.tipo_servizio] = self
+        self.salva_parcheggi(parcheggi)
+
+    def carica_parcheggi(self):
         if os.path.isfile('Dati/Parcheggi.pickle'):
             with open('Dati/Parcheggi.pickle', 'rb') as f:
-                parcheggi = pickle.load(f)
-        parcheggi[self.tipo_servizio] = self
+                return pickle.load(f)
+        return {}
+
+    def salva_parcheggi(self, parcheggi):
         with open('Dati/Parcheggi.pickle', 'wb') as f:
             pickle.dump(parcheggi, f, pickle.HIGHEST_PROTOCOL)
 
     def get_info(self):
         info = super().get_info_servizio()
-        info["posti_disponibili"] = self.posti_disponibili
-        info["tariffa_oraria"] = self.tariffa_oraria
+        info.update({
+            "posti_disponibili": self.posti_disponibili,
+            "tariffa_oraria": self.tariffa_oraria
+        })
         return info
 
-    def calcola_costo(self):
-        # Implementa il calcolo del costo del parcheggio
-        pass
-
     def verifica_disponibilita(self):
-        # Implementa la verifica della disponibilità di posti auto nel parcheggio
+        # Implementazione specifica: verifica la disponibilità di posti nel parcheggio
         pass
 
     def assegna_servizio(self):
-        # Implementa l'assegnamento del servizio alla camera e all'addettoServizi
+        # Implementazione specifica: assegna un posto auto
         pass
 
     def rimuovi_servizio(self):
-        # Implementa la rimozione del servizio dalla camera e dall'addettoServizi
+        # Implementazione specifica: libera un posto auto
         pass
-
-

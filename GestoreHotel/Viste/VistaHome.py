@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QWidget, QGridLayout, QPushButton, QSizePolicy
 from Viste.VistaGestioneCamere import VistaGestioneCamere
 from Viste.VistaGestioneClienti import VistaGestioneClienti
 from Viste.VistaGestioneDipendenti import VistaGestioneDipendenti
+from Viste.VistaGestionePrenotazione import VistaGestionePrenotazione
 
 
 class VistaHome(QWidget):
@@ -50,7 +51,8 @@ class VistaHome(QWidget):
         pass
 
     def go_prenotazioni(self):
-        pass
+        self.vista_gestione_prenotazione = VistaGestionePrenotazione()
+        self.vista_gestione_prenotazione.show()
 
     def go_clienti(self):
         self.vista_clienti = VistaGestioneClienti()
