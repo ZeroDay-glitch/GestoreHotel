@@ -17,6 +17,7 @@ class VistaAddettoServizi(QWidget):
         self.label_data_nascita = QLabel("")
         self.label_luogo_nascita = QLabel("")
         self.label_cellulare = QLabel("")
+        self.label_password = QLabel("Password")
 
         self.imposta_stile_e_aggiungi_etichette()
 
@@ -51,6 +52,7 @@ class VistaAddettoServizi(QWidget):
         self.v_layout.addWidget(self.label_data_nascita)
         self.v_layout.addWidget(self.label_luogo_nascita)
         self.v_layout.addWidget(self.label_cellulare)
+        self.v_layout.addWidget(self.label_password)
         self.v_layout.addItem(QSpacerItem(30, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
     def carica_dettagli_addetto_servizi(self):
@@ -61,6 +63,7 @@ class VistaAddettoServizi(QWidget):
         self.label_data_nascita.setText(f"Data di Nascita: {info.get('data_nascita', '')}")
         self.label_luogo_nascita.setText(f"Luogo di Nascita: {info.get('luogo_nascita', '')}")
         self.label_cellulare.setText(f"Cellulare: {info.get('cellulare', '')}")
+        self.label_password.setText(f"Password: {self.addetto_servizi.password}")
 
     def modifica_addetto_servizi(self):
         vista_modifica = VistaModificaAddettoServizi(self.addetto_servizi, self.callback_congiunto, self)
@@ -74,7 +77,6 @@ class VistaAddettoServizi(QWidget):
             self.modifica_callback()
 
     def ricarica_dati_addetto_servizi(self):
-
         addetto_servizi_aggiornato = self.addetto_servizi.ricerca_dipendente_codice(self.addetto_servizi.codice)
         if addetto_servizi_aggiornato:
             self.addetto_servizi = addetto_servizi_aggiornato

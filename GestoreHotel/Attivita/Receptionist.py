@@ -5,8 +5,8 @@ from Attivita.Dipendente import Dipendente
 
 
 class Receptionist(Dipendente):
-    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, lingue):
-        super().__init__(cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo="receptionist")
+    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, lingue, password):
+        super().__init__(cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo="receptionist", password=password)
         self.lingue = lingue
         self.prenotazioni = []
 

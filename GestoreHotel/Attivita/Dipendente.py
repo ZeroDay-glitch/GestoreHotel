@@ -3,7 +3,7 @@ import datetime
 
 
 class Dipendente:
-    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo):
+    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo, password):
         self.cellulare = cellulare
         self.codice = codice
         self.cognome = cognome
@@ -11,6 +11,7 @@ class Dipendente:
         self.luogo_nascita = luogo_nascita
         self.nome = nome
         self.ruolo = ruolo
+        self.password = password
 
     def get_info_dipendente(self):
         return {
@@ -20,7 +21,8 @@ class Dipendente:
             "luogo_nascita": self.luogo_nascita,
             "nome": self.nome,
             "cellulare": self.cellulare,
-            "ruolo": self.ruolo
+            "ruolo": self.ruolo,
+            "password": self.password
         }
 
     @abstractmethod

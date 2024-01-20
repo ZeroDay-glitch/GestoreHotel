@@ -5,8 +5,8 @@ from Attivita.Dipendente import Dipendente
 
 
 class AddettoServizi(Dipendente):
-    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, camera, servizio_in_camera):
-        super().__init__(cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo="addettoServizi")
+    def __init__(self, cellulare, codice, cognome, data_nascita, luogo_nascita, nome, camera, servizio_in_camera, password):
+        super().__init__(cellulare, codice, cognome, data_nascita, luogo_nascita, nome, ruolo="addettoServizi", password=password)
         self.camera = camera
         self.servizio_in_camera = servizio_in_camera
 

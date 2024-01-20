@@ -11,13 +11,13 @@ class VistaReceptionist(QWidget):
 
         self.v_layout = QVBoxLayout()
 
-        # Inizializza le etichette
         self.label_nome = QLabel("")
         self.label_codice = QLabel("")
         self.label_data_nascita = QLabel("")
         self.label_luogo_nascita = QLabel("")
         self.label_cellulare = QLabel("")
         self.label_lingue = QLabel("")
+        self.label_password = QLabel("")
 
         self.imposta_stile_e_aggiungi_etichette()
 
@@ -53,6 +53,7 @@ class VistaReceptionist(QWidget):
         self.v_layout.addWidget(self.label_luogo_nascita)
         self.v_layout.addWidget(self.label_cellulare)
         self.v_layout.addWidget(self.label_lingue)
+        self.v_layout.addWidget(self.label_password)
         self.v_layout.addItem(QSpacerItem(30, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
     def carica_dettagli_receptionist(self):
@@ -64,26 +65,24 @@ class VistaReceptionist(QWidget):
         self.label_luogo_nascita.setText(f"Luogo di Nascita: {info.get('luogo_nascita', '')}")
         self.label_cellulare.setText(f"Cellulare: {info.get('cellulare', '')}")
         self.label_lingue.setText(f"Lingue: {', '.join(info.get('lingue', []))}")
+        self.label_password.setText(f"Password: {info.get('password', '')}")
 
     def modifica_receptionist(self):
         vista_modifica = VistaModificaReceptionist(self.receptionist, self.callback_congiunto, self)
         vista_modifica.exec_()
 
     def callback_congiunto(self):
-        # Chiama prima il proprio metodo di aggiornamento
         self.aggiorna_ui()
-        # Poi chiama il callback di VistaGestioneReceptionist, se esiste
         if self.modifica_callback:
             self.modifica_callback()
-    def ricarica_dati_receptionist(self):
 
+    def ricarica_dati_receptionist(self):
         receptionist_aggiornato = self.receptionist.ricerca_dipendente_codice(self.receptionist.codice)
         if receptionist_aggiornato:
             self.receptionist = receptionist_aggiornato
         else:
-            # Gestisci l'errore se il receptionist non viene trovato (ad esempio, mostrando un messaggio)
             pass
 
     def aggiorna_ui(self):
-        self.ricarica_dati_receptionist()  # Aggiorna i dati del receptionist
-        self.carica_dettagli_receptionist()  # Aggiorna l'interfaccia utente con i nuovi dati
+        self.ricarica_dati_receptionist()
+        self.carica_dettagli_receptionist()

@@ -17,6 +17,7 @@ class VistaModificaAddettoServizi(QDialog):
         self.add_info_text("dataNascita", "Data Nascita", str(addetto_servizi.data_nascita))
         self.add_info_text("luogoNascita", "Luogo Nascita", addetto_servizi.luogo_nascita)
         self.add_info_text("cellulare", "Cellulare", addetto_servizi.cellulare)
+        self.add_info_text("password", "Password", addetto_servizi.password)
 
         btn_salva = QPushButton("Salva")
         btn_salva.clicked.connect(self.salva_modifiche)
@@ -42,6 +43,7 @@ class VistaModificaAddettoServizi(QDialog):
         nuovo_data_nascita = self.qlines["dataNascita"].text()
         nuovo_luogo_nascita = self.qlines["luogoNascita"].text()
         nuovo_cellulare = self.qlines["cellulare"].text()
+        nuova_password = self.qlines["password"].text()
 
         # Crea un dizionario con i nuovi dati
         new_data = {
@@ -50,6 +52,7 @@ class VistaModificaAddettoServizi(QDialog):
             "data_nascita": nuovo_data_nascita,
             "luogo_nascita": nuovo_luogo_nascita,
             "cellulare": nuovo_cellulare,
+            "password": nuova_password,
         }
 
         success = self.addetto_servizi.modifica_dipendente(new_data)

@@ -21,20 +21,21 @@ class VistaAggiungiAddettoServizi(QWidget):
         self.add_calendar("dataNascita", "Data Nascita")
         self.add_info_text("luogoNascita", "Luogo Nascita")
         self.add_info_text("cellulare", "Cellulare")
+        self.add_info_text("password", "Password")
 
         btn_ok = QPushButton("OK")
         btn_ok.clicked.connect(self.aggiungi_addetto_servizi)
         btn_ok.setStyleSheet("""
-                            QPushButton {
-                                background-color: white;
-                                color: black;
-                                border-radius: 10px;
-                            }
-                            QPushButton:hover {
-                                background-color: darkgreen;
-                                color: white;
-                            }
-                        """)
+                    QPushButton {
+                        background-color: white;
+                        color: black;
+                        border-radius: 10px;
+                    }
+                    QPushButton:hover {
+                        background-color: darkgreen;
+                        color: white;
+                    }
+                """)
         self.v_layout.addWidget(btn_ok)
 
         self.setLayout(self.v_layout)
@@ -74,6 +75,7 @@ class VistaAggiungiAddettoServizi(QWidget):
             data_nascita = self.qlines["dataNascita"].selectedDate().toPyDate()
             luogo_nascita = self.qlines["luogoNascita"].text()
             cellulare = self.qlines["cellulare"].text()
+            password = self.qlines["password"].text()
 
             # Verifica che tutti i campi obbligatori siano stati compilati
             if not codice or not nome or not cognome or not data_nascita or not luogo_nascita or not cellulare:
@@ -82,11 +84,11 @@ class VistaAggiungiAddettoServizi(QWidget):
                 return
 
             nuovo_addetto_servizi = AddettoServizi(cellulare, codice, cognome, data_nascita, luogo_nascita, nome,
-                                                   camera=None, servizio_in_camera=None)
-            self.callback()  # Aggiorna la vista principale
+                                                   camera=None, servizio_in_camera=None, password=password)
+            self.callback()
             self.close()
         except Exception as e:
-            QMessageBox.critical(self, 'Errore', f'Errore durante l\'aggiunta dell\'addeto ai servizi: {e}',
+            QMessageBox.critical(self, 'Errore', f'Errore durante l\'aggiunta dell\'addetto ai servizi: {e}',
                                  QMessageBox.Ok)
 
     def generate_unique_code(self):
