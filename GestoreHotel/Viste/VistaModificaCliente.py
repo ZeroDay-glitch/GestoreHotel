@@ -8,7 +8,6 @@ class VistaModificaCliente(QDialog):
         self.callback = callback
         self.vista_cliente = vista_cliente
 
-        # Creiamo un nuovo QVBoxLayout per questa vista
         v_layout = QVBoxLayout(self)
 
         self.qlines = {}
@@ -24,14 +23,14 @@ class VistaModificaCliente(QDialog):
         self.add_info_text("note", "Note", cliente.note)
 
         btn_salva = QPushButton("Salva")
-        btn_salva.clicked.connect(self.salva_modifiche)  # Collega il pulsante Salva alla funzione salva_modifiche
+        btn_salva.clicked.connect(self.salva_modifiche)
         v_layout.addWidget(btn_salva)
 
         self.setWindowTitle("Modifica Cliente")
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def add_info_text(self, nome, label, valore_iniziale=""):
-        v_layout = self.layout()  # Otteniamo il layout corrente della vista
+        v_layout = self.layout()
 
         label_widget = QLabel(label)
         v_layout.addWidget(label_widget)
@@ -42,7 +41,6 @@ class VistaModificaCliente(QDialog):
         v_layout.addWidget(current_text)
 
     def salva_modifiche(self):
-        # Ottieni i nuovi valori dai campi di testo
         nuovo_nome = self.qlines["nome"].text()
         nuovo_cognome = self.qlines["cognome"].text()
         nuovo_data_nascita = self.qlines["dataNascita"].text()
@@ -53,7 +51,6 @@ class VistaModificaCliente(QDialog):
         nuovo_email = self.qlines["email"].text()
         nuovo_note = self.qlines["note"].text()
 
-        # Crea un dizionario con i nuovi dati
         new_data = {
             "nome": nuovo_nome,
             "cognome": nuovo_cognome,
@@ -66,13 +63,10 @@ class VistaModificaCliente(QDialog):
             "note": nuovo_note
         }
 
-        # Chiama il metodo per sovrascrivere i dati del cliente
         success = self.cliente.modifica_cliente(new_data)
         if success:
             self.accept()
             if self.callback:
                 self.callback()
         else:
-            # Gestisci il caso in cui la modifica non sia riuscita
-            # Mostra un messaggio di errore o fai altro in base alle tue esigenze
             pass

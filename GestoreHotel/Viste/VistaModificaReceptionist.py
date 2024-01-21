@@ -25,7 +25,7 @@ class VistaModificaReceptionist(QDialog):
         v_layout.addWidget(btn_salva)
 
         self.setWindowTitle("Modifica Receptionist")
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def add_info_text(self, nome, label, valore_iniziale=""):
         v_layout = self.layout()
@@ -57,7 +57,6 @@ class VistaModificaReceptionist(QDialog):
             "password": nuova_password
         }
 
-        # Chiama il metodo per sovrascrivere i dati del receptionist
         success = self.receptionist.modifica_dipendente(new_data)
         if success:
             self.accept()

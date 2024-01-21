@@ -23,25 +23,21 @@ class VistaGestioneReceptionist(QWidget):
         self.layout.addWidget(self.get_generic_button("RIMUOVI", self.rimuovi_receptionist, 12))
         self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
-        # Etichetta per separare i pulsanti dalla lista
         label = QLabel("Lista Receptionists")
         self.layout.addWidget(label)
 
-        # Lista dei receptionist
         self.lista_receptionist = QListView()
         self.layout.addWidget(self.lista_receptionist)
         self.update_ui()
 
-        # Spazio vuoto per distanziare
         self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
-        # Pulsante "Annulla" per tornare indietro
         self.layout.addWidget(self.get_generic_button("Annulla", self.close, 12))
 
         self.setLayout(self.layout)
         self.setWindowTitle("Gestione Receptionist")
         self.resize(400, 300)
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
 
     def load_receptionists(self):
@@ -51,13 +47,11 @@ class VistaGestioneReceptionist(QWidget):
                 self.receptionists.extend(current.values())
 
     def update_ui(self):
-        # Carica l'elenco dei receptionist e aggiorna la lista
-        self.receptionists = [] # Carica qui i dati dei receptionist
+        self.receptionists = []
         self.load_receptionists()
         listview_model = QStandardItemModel(self.lista_receptionist)
         for receptionist in self.receptionists:
             item = QStandardItem()
-            # Modifica questa riga per visualizzare i dettagli del receptionist
             item.setText(f"{receptionist.nome} {receptionist.cognome}")
             item.setEditable(False)
             font = item.font()

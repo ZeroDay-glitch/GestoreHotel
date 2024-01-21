@@ -41,7 +41,7 @@ class VistaAggiungiCliente(QWidget):
 
         self.setLayout(self.v_layout)
         self.setWindowTitle("Nuovo Cliente")
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def add_info_text(self, nome, label):
         self.v_layout.addWidget(QLabel(label))

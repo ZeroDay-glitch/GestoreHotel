@@ -8,11 +8,9 @@ class VistaPrenotazione(QWidget):
         self.prenotazione = prenotazione
         self.layout = QVBoxLayout()
 
-        # Imposta un font più grande per i dettagli
         font = QFont()
         font.setPointSize(12)
 
-        # Funzione per aggiungere le etichette con un font personalizzato
         def add_label(text):
             label = QLabel(text)
             label.setFont(font)
@@ -24,15 +22,13 @@ class VistaPrenotazione(QWidget):
         add_label(f"Data Fine: {prenotazione.data_ora_fine}")
         add_label(f"Numero Ospiti: {prenotazione.numero_ospiti}")
 
-        # Verifica e mostra lo stato dei servizi
+
         servizio_in_camera = "Sì" if any(
             servizio.tipo_servizio == "Servizio in Camera" for servizio in prenotazione.servizi) else "No"
         parcheggio = "Sì" if any(servizio.tipo_servizio == "Parcheggio" for servizio in prenotazione.servizi) else "No"
 
         add_label(f"Servizio in Camera: {servizio_in_camera}")
         add_label(f"Parcheggio: {parcheggio}")
-
-        # ... altro codice ...
 
         btn_close = QPushButton("Chiudi")
         btn_close.clicked.connect(self.close)
@@ -41,4 +37,4 @@ class VistaPrenotazione(QWidget):
         self.setLayout(self.layout)
         self.setWindowTitle(f"Dettagli Prenotazione: {prenotazione.codice}")
         self.resize(400, 300)
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")

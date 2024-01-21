@@ -60,7 +60,7 @@ class VistaCliente(QWidget):
 
         self.setLayout(self.v_layout)
         self.setWindowTitle("Cliente")
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def imposta_stile_e_aggiungi_etichette(self):
         font_nome = self.label_nome.font()

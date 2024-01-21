@@ -79,7 +79,6 @@ class VistaNoteCliente(QDialog):
             self.btn_sblocca.hide()
 
     def invia_messaggio(self):
-        # Implementa la logica per inviare un messaggio al cliente
         QMessageBox.information(self, "Invia Messaggio", "Messaggio inviato (implementa la logica appropriata).")
 
     def salva_note(self):

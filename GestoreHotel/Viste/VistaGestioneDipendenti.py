@@ -21,7 +21,7 @@ class VistaGestioneDipendenti(QWidget):
         self.setLayout(layout)
         self.setWindowTitle("Gestione Dipendenti")
         self.resize(400, 300)
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def get_generic_button(self, titolo, on_click, font_size=None):
         button = QPushButton(titolo)

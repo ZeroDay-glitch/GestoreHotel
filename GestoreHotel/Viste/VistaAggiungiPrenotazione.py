@@ -16,7 +16,7 @@ class VistaAggiungiPrenotazione(QWidget):
         self.v_layout = QVBoxLayout()
         self.setup_ui()
         self.setWindowTitle("Nuova Prenotazione")
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def setup_ui(self):
         self.clienti_combobox = QComboBox(self)
