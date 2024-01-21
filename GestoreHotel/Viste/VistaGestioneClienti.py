@@ -14,7 +14,6 @@ class VistaGestioneClienti(QWidget):
         super(VistaGestioneClienti, self).__init__(parent)
         self.layout = QVBoxLayout()
 
-        # Pulsanti per gestire i clienti
         self.layout.addWidget(self.get_generic_button("AGGIUNGI", lambda: self.aggiungi_cliente(self.update_ui), 12))
         self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.layout.addWidget(self.get_generic_button("APRI", self.apri_cliente, 12))
@@ -22,19 +21,16 @@ class VistaGestioneClienti(QWidget):
         self.layout.addWidget(self.get_generic_button("RIMUOVI", self.rimuovi_cliente, 12))
         self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
-        # Etichetta per separare i pulsanti dalla lista
         label = QLabel("Lista Clienti")
         self.layout.addWidget(label)
 
-        # Lista dei clienti
         self.lista_cliente = QListView()
         self.layout.addWidget(self.lista_cliente)
         self.update_ui()
 
-        # Spazio vuoto per distanziare
+
         self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
-        # Pulsante "Annulla" per tornare indietro
         self.layout.addWidget(self.get_generic_button("Annulla", self.close, 12))
 
         self.setLayout(self.layout)
@@ -49,13 +45,11 @@ class VistaGestioneClienti(QWidget):
                 self.clienti.extend(current.values())
 
     def update_ui(self):
-        # Carica l'elenco dei clienti e aggiorna la lista
-        self.clienti = []  # Carica qui i dati dei clienti
+        self.clienti = []
         self.load_clienti()
         listview_model = QStandardItemModel(self.lista_cliente)
         for cliente in self.clienti:
             item = QStandardItem()
-            # Modifica questa riga per visualizzare i dettagli del cliente
             item.setText(f"{cliente.nome} {cliente.cognome}")
             item.setEditable(False)
             font = item.font()
@@ -103,19 +97,14 @@ class VistaGestioneClienti(QWidget):
             print("INDEX ERROR")
 
     def rimuovi_cliente(self):
-        # Ottieni l'indice dell'elemento selezionato nella lista dei clienti
         selected_index = self.lista_cliente.selectedIndexes()[0]
 
         if selected_index.isValid():
-            # Identifica il cliente corrispondente all'elemento selezionato
             selected_cliente = self.clienti[selected_index.row()]
 
-            # Rimuovi il cliente dai dati su disco
             if selected_cliente:
                 if selected_cliente.rimuovi_cliente():
-                    # Rimozione riuscita, aggiorna l'interfaccia utente
                     self.update_ui()
                 else:
-                    # Rimozione fallita, mostra un messaggio di errore
                     QMessageBox.critical(self, 'Errore', 'Impossibile rimuovere il cliente.', QMessageBox.Ok,
                                          QMessageBox.Ok)

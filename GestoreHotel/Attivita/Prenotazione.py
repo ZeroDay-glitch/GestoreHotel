@@ -29,7 +29,7 @@ class Prenotazione:
             "data_ora_fine": self.data_ora_fine,
             "numero_ospiti": self.numero_ospiti,
             "receptionist": self.receptionist,
-            "servizi": [servizio.get_info_servizio() for servizio in self.servizi]  # Assuming Servizio has a get_info_servizio method
+            "servizi": [servizio.get_info_servizio() for servizio in self.servizi]
         }
 
     def modifica_prenotazione(self, new_data):

@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import QMessageBox
 
 
 class Cliente:
-    def __init__(self, cellulare, codice, codice_fiscale, cognome, data_nascita, documento, email, luogo_nascita, nome,
-                 note):
+    def __init__(self, cellulare, codice, codice_fiscale, cognome, data_nascita, documento, email, luogo_nascita,
+                 nome, note="", bloccato=False):
         self.cellulare = cellulare
         self.codice = codice
         self.codice_fiscale = codice_fiscale
@@ -19,6 +19,7 @@ class Cliente:
         self.nome = nome
         self.note = note
         self.prenotazioni = []
+        self.bloccato = bloccato
 
         clienti = {}
         if os.path.isfile('Dati/Clienti.pickle'):
@@ -40,7 +41,8 @@ class Cliente:
             "nome": self.nome,
             "cellulare": self.cellulare,
             "prenotazioni": self.prenotazioni,
-            "note": self.note
+            "note": self.note,
+            "bloccato": self.bloccato
         }
 
     def ricerca_cliente_nome_cognome(self, nome, cognome):

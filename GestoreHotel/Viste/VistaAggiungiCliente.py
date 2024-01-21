@@ -4,6 +4,7 @@ import os.path
 import pickle
 from Attivita.Cliente import Cliente
 
+
 class VistaAggiungiCliente(QWidget):
 
     def __init__(self, callback):
@@ -11,18 +12,17 @@ class VistaAggiungiCliente(QWidget):
         self.callback = callback
         self.v_layout = QVBoxLayout()
         self.qlines = {}
-        self.load_existing_codes()  # Carica i codici esistenti da un file pickle
+        self.load_existing_codes()
         self.add_info_text("codice", "Codice")
-        self.qlines["codice"].setText(str(self.generate_unique_code()))  # Genera e imposta il codice univoco
+        self.qlines["codice"].setText(str(self.generate_unique_code()))
         self.add_info_text("nome", "Nome")
         self.add_info_text("cognome", "Cognome")
-        self.add_calendar("data_nascita", "Data Nascita")
-        self.add_info_text("luogo_nascita", "Luogo Nascita")
+        self.add_calendar("data_nascita", "Data di Nascita")
+        self.add_info_text("luogo_nascita", "Luogo di Nascita")
         self.add_info_text("cellulare", "Cellulare")
         self.add_info_text("codice_fiscale", "Codice Fiscale")
         self.add_info_text("documento", "Documento")
         self.add_info_text("email", "Email")
-        self.add_info_text("note", "Note")
 
         btn_ok = QPushButton("OK")
         btn_ok.clicked.connect(self.aggiungi_cliente)
@@ -62,7 +62,6 @@ class VistaAggiungiCliente(QWidget):
         self.v_layout.addWidget(self.calendar)
 
     def load_existing_codes(self):
-        # Carica i codici esistenti da un file pickle, se presente
         self.codici_esistenti = []
         file_path = 'Dati/codici_esistenti.pickle'
         if os.path.isfile(file_path):
@@ -80,16 +79,14 @@ class VistaAggiungiCliente(QWidget):
             codice_fiscale = self.qlines["codice_fiscale"].text()
             documento = self.qlines["documento"].text()
             email = self.qlines["email"].text()
-            note = self.qlines["note"].text()
 
-            # Verifica che tutti i campi obbligatori siano stati compilati
             if not codice or not nome or not cognome or not data_nascita or not luogo_nascita or not cellulare:
                 QMessageBox.critical(self, 'Errore', 'Compila tutti i campi obbligatori',
                                      QMessageBox.Ok, QMessageBox.Ok)
                 return
 
             nuovo_cliente = Cliente(cellulare, codice, codice_fiscale, cognome, data_nascita, documento, email,
-                                     luogo_nascita, nome, note)
+                                     luogo_nascita, nome)
             self.callback()  # Aggiorna la vista principale
             self.close()
         except Exception as e:

@@ -8,7 +8,7 @@ class ServizioInCamera(Servizio):
     def __init__(self, tipo_servizio, costo_servizio, camera, addettoServizi, note=""):
         super().__init__(tipo_servizio, costo_servizio)
         self.camera = camera
-        self.addettoServizi = addettoServizi
+        self.addetto_servizi = addettoServizi
         self.note = note
 
         # Carica i servizi esistenti, aggiungi questo servizio e salva
@@ -30,7 +30,7 @@ class ServizioInCamera(Servizio):
         info = super().get_info_servizio()
         info.update({
             "camera": self.camera.get_info(),
-            "addettoServizi": self.addettoServizi.get_info(),
+            "addettoServizi": self.addetto_servizi.get_info(),
             "note": self.note
         })
         return info
