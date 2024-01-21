@@ -38,9 +38,33 @@ class VistaAggiungiPrenotazione(QWidget):
         btn_annulla.clicked.connect(self.close)
         self.v_layout.addWidget(btn_annulla)
 
+        btn_annulla.setStyleSheet("""
+                    QPushButton {
+                        background-color: white;
+                        color: black;
+                        border-radius: 10px;
+                    }
+                    QPushButton:hover {
+                        background-color: darkgreen;
+                        color: white;
+                    }
+                """)
+
         btn_ok = QPushButton("OK")
         btn_ok.clicked.connect(self.aggiungi_prenotazione)
         self.v_layout.addWidget(btn_ok)
+
+        btn_ok.setStyleSheet("""
+                            QPushButton {
+                                background-color: white;
+                                color: black;
+                                border-radius: 10px;
+                            }
+                            QPushButton:hover {
+                                background-color: darkgreen;
+                                color: white;
+                            }
+                        """)
 
         self.setLayout(self.v_layout)
 
