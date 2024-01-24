@@ -40,7 +40,7 @@ class VistaGestioneAddettoServizi(QWidget):
         self.setLayout(self.layout)
         self.setWindowTitle("Gestione Addetti ai Servizi")
         self.resize(400, 300)
-        self.setStyleSheet("background-color: #393535;")
+        self.setStyleSheet("background-color: lightgreen;")
 
     def get_generic_button(self, titolo, on_click, font_size=None):
         button = QPushButton(titolo)

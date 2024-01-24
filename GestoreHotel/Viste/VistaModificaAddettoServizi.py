@@ -24,7 +24,7 @@ class VistaModificaAddettoServizi(QDialog):
         v_layout.addWidget(btn_salva)
 
         self.setWindowTitle("Modifica Addetto ai Servizi")
-        self.setStyleSheet("background-color: #393535;")
+        self.setStyleSheet("background-color: lightgreen;")
 
     def add_info_text(self, nome, label, valore_iniziale=""):
         v_layout = self.layout()

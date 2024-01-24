@@ -37,7 +37,7 @@ class VistaGestioneReceptionist(QWidget):
         self.setLayout(self.layout)
         self.setWindowTitle("Gestione Receptionist")
         self.resize(400, 300)
-        self.setStyleSheet("background-color: #393535;")
+        self.setStyleSheet("background-color: lightgreen;")
 
 
     def load_receptionists(self):

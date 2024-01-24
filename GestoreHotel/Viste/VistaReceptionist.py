@@ -40,7 +40,7 @@ class VistaReceptionist(QWidget):
 
         self.setLayout(self.v_layout)
         self.setWindowTitle("Receptionist")
-        self.setStyleSheet("background-color: #393535;")
+        self.setStyleSheet("background-color: lightgreen;")
 
     def imposta_stile_e_aggiungi_etichette(self):
         font_nome = self.label_nome.font()

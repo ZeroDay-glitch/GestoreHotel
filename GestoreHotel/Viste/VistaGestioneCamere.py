@@ -48,7 +48,7 @@ class VistaGestioneCamere(QWidget):
 
         self.setLayout(self.layout)
         self.setWindowTitle("Gestione Camere")
-        self.setStyleSheet("background-color: #393535;")
+        self.setStyleSheet("background-color: lightgreen;")
 
     def carica_o_crea_camere(self):
         file_path = 'Dati/Camere.pickle'

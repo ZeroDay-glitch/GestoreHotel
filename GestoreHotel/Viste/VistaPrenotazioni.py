@@ -37,4 +37,4 @@ class VistaPrenotazione(QWidget):
         self.setLayout(self.layout)
         self.setWindowTitle(f"Dettagli Prenotazione: {prenotazione.codice}")
         self.resize(400, 300)
-        self.setStyleSheet("background-color: #393535;")
+        self.setStyleSheet("background-color: lightgreen;")
