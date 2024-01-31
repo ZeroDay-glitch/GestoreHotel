@@ -62,7 +62,7 @@ class Prenotazione:
         except FileNotFoundError:
             return False
 
-    def verificaScadenza(self):
+    def verifica_scadenza(self):
         if datetime.datetime.now() > self.data_ora_fine:
             return True
         return False

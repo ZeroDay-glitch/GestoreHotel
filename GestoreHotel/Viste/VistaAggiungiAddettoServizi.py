@@ -27,12 +27,12 @@ class VistaAggiungiAddettoServizi(QWidget):
         btn_ok.clicked.connect(self.aggiungi_addetto_servizi)
         btn_ok.setStyleSheet("""
                     QPushButton {
-                        background-color: white;
+                        background-color: #C3D4C7;
                         color: black;
                         border-radius: 10px;
                     }
                     QPushButton:hover {
-                        background-color: darkgreen;
+                        background-color: #707070;
                         color: white;
                     }
                 """)
@@ -40,23 +40,30 @@ class VistaAggiungiAddettoServizi(QWidget):
 
         self.setLayout(self.v_layout)
         self.setWindowTitle("Nuovo Addetto ai Servizi")
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def add_info_text(self, nome, label):
-        self.v_layout.addWidget(QLabel(label))
+        label_widget = QLabel(label)
+        label_widget.setStyleSheet("color: white;")
+        self.v_layout.addWidget(label_widget)
+
         current_text = QLineEdit(self)
-        current_text.setStyleSheet("background-color: white;")
+        current_text.setStyleSheet("background-color: white; color: black;")
         self.qlines[nome] = current_text
         self.v_layout.addWidget(current_text)
+
         if nome == "codice":
             current_text.setReadOnly(True)
             current_text.setMaximumHeight(30)
         self.qlines[nome] = current_text
 
     def add_calendar(self, nome, label):
-        self.v_layout.addWidget(QLabel(label))
+        label_widget = QLabel(label)
+        label_widget.setStyleSheet("color: white;")
+        self.v_layout.addWidget(label_widget)
+
         self.calendar = QCalendarWidget(self)
-        self.calendar.setStyleSheet("background-color: #87CEEB;")
+        self.calendar.setStyleSheet("background-color: #C3D4C7;")
         self.qlines[nome] = self.calendar
         self.v_layout.addWidget(self.calendar)
 

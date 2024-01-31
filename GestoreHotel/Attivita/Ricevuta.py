@@ -13,7 +13,7 @@ class Ricevuta:
         if os.path.isfile('Dati/Ricevute.pickle'):
             with open('Dati/Ricevute.pickle', 'rb') as f:
                 ricevute = pickle.load(f)
-        ricevute[data_emissione] = self  # Assuming data_emissione is unique for each receipt
+        ricevute[data_emissione] = self
         with open('Dati/Ricevute.pickle', 'wb') as f:
             pickle.dump(ricevute, f, pickle.HIGHEST_PROTOCOL)
 

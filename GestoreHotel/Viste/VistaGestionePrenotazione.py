@@ -1,11 +1,12 @@
 import os
 import pickle
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QFont
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QSpacerItem, QSizePolicy, QLabel, QListView, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QSpacerItem, QSizePolicy, QLabel, QListView, QPushButton, QMessageBox, \
+    QLineEdit
 
 from Viste.VistaAggiungiPrenotazione import VistaAggiungiPrenotazione
-from Attivita.Cliente import Cliente  # Assicurati di importare la classe Cliente da dove si trova
 from Viste.VistaPrenotazioni import VistaPrenotazione
 
 
@@ -25,7 +26,25 @@ class VistaGestionePrenotazione(QWidget):
         self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
         label = QLabel("Lista Prenotazioni")
+        label.setStyleSheet("QLabel { color : white; }")
         self.layout.addWidget(label)
+
+        self.search_bar = QLineEdit()
+        self.search_bar.setPlaceholderText("Cerca prenotazione...")
+        self.search_bar.textChanged.connect(self.update_ui)
+        self.search_bar.setStyleSheet("""
+                            QLineEdit {
+                                color: white;
+                                background-color: #555;
+                                border: 2px solid #555;
+                                border-radius: 10px;
+                                padding: 5px;
+                            }
+                            QLineEdit:focus {
+                                border: 2px solid #aaa;
+                            }
+                        """)
+        self.layout.addWidget(self.search_bar)
 
         self.lista_prenotazione = QListView()
         self.layout.addWidget(self.lista_prenotazione)
@@ -38,7 +57,7 @@ class VistaGestionePrenotazione(QWidget):
         self.setLayout(self.layout)
         self.setWindowTitle("Gestione Prenotazioni")
         self.resize(400, 300)
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def load_clienti(self):
         if os.path.isfile('Dati/Clienti.pickle'):
@@ -47,19 +66,24 @@ class VistaGestionePrenotazione(QWidget):
 
     def update_ui(self):
         listview_model = QStandardItemModel(self.lista_prenotazione)
+        search_text = self.search_bar.text().lower()
 
         if os.path.isfile('Dati/Prenotazioni.pickle'):
             with open('Dati/Prenotazioni.pickle', 'rb') as f:
                 prenotazioni = pickle.load(f)
 
             for codice, prenotazione in prenotazioni.items():
-                item = QStandardItem(
-                    f"Cliente: {prenotazione.cliente.nome} {prenotazione.cliente.cognome} - Codice: {codice}")
-                item.setEditable(False)
-                item.setData(codice)
-                listview_model.appendRow(item)
+                full_name = f"{prenotazione.cliente.nome} {prenotazione.cliente.cognome}".lower()
+                codice_str = str(codice)
+                if search_text in full_name or search_text in codice_str:
+                    item = QStandardItem(
+                        f"Cliente: {prenotazione.cliente.nome} {prenotazione.cliente.cognome} - Codice: {codice}")
+                    item.setEditable(False)
+                    item.setData(codice)
+                    listview_model.appendRow(item)
+                    item.setForeground(Qt.white)
 
-            self.lista_prenotazione.setModel(listview_model)
+        self.lista_prenotazione.setModel(listview_model)
 
     def get_generic_button(self, titolo, on_click, font_size=None):
         button = QPushButton(titolo)
@@ -73,12 +97,12 @@ class VistaGestionePrenotazione(QWidget):
 
         button.setStyleSheet("""
             QPushButton {
-                background-color: white;
+                background-color: #C3D4C7;
                 color: black;
                 border-radius: 10px;
             }
             QPushButton:hover {
-                background-color: darkgreen;
+                background-color: #707070;
                 color: white;
             }
         """)

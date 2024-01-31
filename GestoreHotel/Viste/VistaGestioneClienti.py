@@ -123,14 +123,21 @@ class VistaGestioneClienti(QWidget):
             QMessageBox.critical(self, 'Errore', 'Nessun cliente selezionato.', QMessageBox.Ok, QMessageBox.Ok)
 
     def rimuovi_cliente(self):
-        selected_index = self.lista_cliente.selectedIndexes()[0]
+        selected_indexes = self.lista_cliente.selectedIndexes()
 
-        if selected_index.isValid():
-            selected_cliente = self.clienti[selected_index.row()]
+        if not selected_indexes:
+            QMessageBox.critical(self, 'Errore', 'Seleziona un cliente da rimuovere', QMessageBox.Ok, QMessageBox.Ok)
+            return
 
-            if selected_cliente:
-                if selected_cliente.rimuovi_cliente():
-                    self.update_ui()
-                else:
-                    QMessageBox.critical(self, 'Errore', 'Impossibile rimuovere il cliente.', QMessageBox.Ok,
-                                         QMessageBox.Ok)
+        selected_index = selected_indexes[0]
+        selected_cliente = self.clienti[selected_index.row()]
+
+        if selected_cliente:
+            success = selected_cliente.rimuovi_cliente()
+            if success:
+                self.update_ui()
+            else:
+                QMessageBox.critical(self, 'Errore', 'Impossibile rimuovere il cliente.', QMessageBox.Ok,
+                                     QMessageBox.Ok)
+        else:
+            QMessageBox.critical(self, 'Errore', 'Cliente non trovato.', QMessageBox.Ok, QMessageBox.Ok)

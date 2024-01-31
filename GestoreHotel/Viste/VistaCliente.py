@@ -31,41 +31,54 @@ class VistaCliente(QWidget):
         self.btn_note = QPushButton('NOTE')
         self.btn_note.clicked.connect(self.apri_vista_note)
         self.btn_note.setStyleSheet("""
-            QPushButton {
-                background-color: white;
-                color: black;
-                border-radius: 10px;
-            }
-            QPushButton:hover {
-                background-color: darkgreen;
-                color: white;
-            }
-        """)
+               QPushButton {
+                   background-color: #C3D4C7;
+                   color: black;
+                   border-radius: 10px;
+                   padding: 10px 15px; /* Aggiunto padding più generoso */
+                   font-size: 16px; /* Aumentato la dimensione del font */
+                   border: 2px solid #555; /* Aggiunto bordo per coerenza */
+                   transition: background-color 0.3s, color 0.3s; /* Effetto transizione più fluido */
+               }
+               QPushButton:hover {
+                   background-color: #707070;
+                   color: white;
+                   border: 2px solid #707070; /* Bordo che cambia con il colore di sfondo */
+               }
+               QPushButton:pressed {
+                   background-color: #505050; /* Leggermente più scuro al click */
+               }
+           """)
         self.v_layout.addWidget(self.btn_note)
 
         btn_modifica = QPushButton('MODIFICA')
         btn_modifica.clicked.connect(self.modifica_cliente)
-        btn_modifica.setStyleSheet("""
-            QPushButton {
-                background-color: white;
-                color: black;
-                border-radius: 10px;
-            }
-            QPushButton:hover {
-                background-color: darkgreen;
-                color: white;
-            }
-        """)
+        btn_modifica.setStyleSheet(self.btn_note.styleSheet())  # Usa lo stesso stile del pulsante 'NOTE'
         self.v_layout.addWidget(btn_modifica)
 
         self.setLayout(self.v_layout)
         self.setWindowTitle("Cliente")
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def imposta_stile_e_aggiungi_etichette(self):
         font_nome = self.label_nome.font()
         font_nome.setPointSize(14)
         self.label_nome.setFont(font_nome)
+
+        etichette = [
+            self.label_nome,
+            self.label_codice,
+            self.label_data_nascita,
+            self.label_luogo_nascita,
+            self.label_cellulare,
+            self.label_codice_fiscale,
+            self.label_documento,
+            self.label_email,
+            self.label_bloccato,
+            self.label_note
+        ]
+        for etichetta in etichette:
+            etichetta.setStyleSheet("color: white;")
 
         self.v_layout.addWidget(self.label_nome)
         self.v_layout.addWidget(self.label_codice)

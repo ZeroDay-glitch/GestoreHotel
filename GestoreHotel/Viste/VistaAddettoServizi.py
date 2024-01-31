@@ -26,26 +26,45 @@ class VistaAddettoServizi(QWidget):
         btn_modifica = QPushButton('MODIFICA')
         btn_modifica.clicked.connect(self.modifica_addetto_servizi)
         btn_modifica.setStyleSheet("""
-                    QPushButton {
-                        background-color: white;
-                        color: black;
-                        border-radius: 10px;
-                    }
-                    QPushButton:hover {
-                        background-color: darkgreen;
-                        color: white;
-                    }
-                """)
+               QPushButton {
+                   background-color: #C3D4C7;
+                   color: black;
+                   border-radius: 10px;
+                   padding: 10px 15px; /* Aggiunto padding più generoso */
+                   font-size: 16px; /* Aumentato la dimensione del font */
+                   border: 2px solid #555; /* Aggiunto bordo per coerenza */
+                   transition: background-color 0.3s, color 0.3s; /* Effetto transizione più fluido */
+               }
+               QPushButton:hover {
+                   background-color: #707070;
+                   color: white;
+                   border: 2px solid #707070; /* Bordo che cambia con il colore di sfondo */
+               }
+               QPushButton:pressed {
+                   background-color: #505050; /* Leggermente più scuro al click */
+               }
+           """)
         self.v_layout.addWidget(btn_modifica)
 
         self.setLayout(self.v_layout)
         self.setWindowTitle("Addetto ai Servizi")
-        self.setStyleSheet("background-color: lightgreen;")
+        self.setStyleSheet("background-color: #393535;")
 
     def imposta_stile_e_aggiungi_etichette(self):
         font_nome = self.label_nome.font()
         font_nome.setPointSize(14)
         self.label_nome.setFont(font_nome)
+
+        etichette = [
+            self.label_nome,
+            self.label_codice,
+            self.label_data_nascita,
+            self.label_luogo_nascita,
+            self.label_cellulare,
+            self.label_password
+        ]
+        for etichetta in etichette:
+            etichetta.setStyleSheet("color: white;")
 
         self.v_layout.addWidget(self.label_nome)
         self.v_layout.addWidget(self.label_codice)
@@ -70,9 +89,7 @@ class VistaAddettoServizi(QWidget):
         vista_modifica.exec_()
 
     def callback_congiunto(self):
-        # Chiama prima il proprio metodo di aggiornamento
         self.aggiorna_ui()
-        # Poi chiama il callback di VistaGestioneReceptionist, se esiste
         if self.modifica_callback:
             self.modifica_callback()
 

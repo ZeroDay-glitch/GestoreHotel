@@ -1,9 +1,10 @@
 import os
 import pickle
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy, QSpacerItem, QLabel, QListView, \
-    QMessageBox
+    QMessageBox, QLineEdit
 
 from Viste.VistaAggiungiReceptionist import VistaAggiungiReceptionist
 from Viste.VistaReceptionist import VistaReceptionist
@@ -15,7 +16,6 @@ class VistaGestioneReceptionist(QWidget):
         super(VistaGestioneReceptionist, self).__init__(parent)
         self.layout = QVBoxLayout()
 
-        # Pulsanti per gestire i receptionist
         self.layout.addWidget(self.get_generic_button("AGGIUNGI", lambda: self.aggiungi_receptionist(self.update_ui), 12))
         self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.layout.addWidget(self.get_generic_button("APRI", self.apri_receptionist, 12))
@@ -23,8 +23,26 @@ class VistaGestioneReceptionist(QWidget):
         self.layout.addWidget(self.get_generic_button("RIMUOVI", self.rimuovi_receptionist, 12))
         self.layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
-        label = QLabel("Lista Receptionists")
+        label = QLabel("Lista Receptionist:")
+        label.setStyleSheet("QLabel { color : white; }")
         self.layout.addWidget(label)
+
+        self.search_bar = QLineEdit()
+        self.search_bar.setPlaceholderText("Cerca receptionist...")
+        self.search_bar.textChanged.connect(self.update_ui)
+        self.search_bar.setStyleSheet("""
+                    QLineEdit {
+                        color: white;
+                        background-color: #555;
+                        border: 2px solid #555;
+                        border-radius: 10px;
+                        padding: 5px;
+                    }
+                    QLineEdit:focus {
+                        border: 2px solid #aaa;
+                    }
+                """)
+        self.layout.addWidget(self.search_bar)
 
         self.lista_receptionist = QListView()
         self.layout.addWidget(self.lista_receptionist)
@@ -37,26 +55,31 @@ class VistaGestioneReceptionist(QWidget):
         self.setLayout(self.layout)
         self.setWindowTitle("Gestione Receptionist")
         self.resize(400, 300)
-        self.setStyleSheet("background-color: lightgreen;")
-
+        self.setStyleSheet("background-color: #393535;")
 
     def load_receptionists(self):
         if os.path.isfile('Dati/Receptionist.pickle'):
             with open('Dati/Receptionist.pickle', 'rb') as f:
                 current = dict(pickle.load(f))
-                self.receptionists.extend(current.values())
+                self.receptionists = list(current.values())
 
     def update_ui(self):
-        self.receptionists = []
         self.load_receptionists()
+        search_text = self.search_bar.text().lower()
+        filtered_receptionists = [receptionist for receptionist in self.receptionists if
+                                  search_text in receptionist.nome.lower() or search_text in receptionist.cognome.lower()]
+
         listview_model = QStandardItemModel(self.lista_receptionist)
-        for receptionist in self.receptionists:
+        for receptionist in filtered_receptionists:
             item = QStandardItem()
             item.setText(f"{receptionist.nome} {receptionist.cognome}")
             item.setEditable(False)
+
             font = item.font()
             font.setPointSize(10)
             item.setFont(font)
+            item.setForeground(Qt.white)
+
             listview_model.appendRow(item)
         self.lista_receptionist.setModel(listview_model)
 
@@ -72,12 +95,12 @@ class VistaGestioneReceptionist(QWidget):
 
         button.setStyleSheet("""
             QPushButton {
-                background-color: white;
+                background-color: #C3D4C7;
                 color: black;
                 border-radius: 10px;
             }
             QPushButton:hover {
-                background-color: darkgreen;
+                background-color: #707070;
                 color: white;
             }
         """)
@@ -98,21 +121,23 @@ class VistaGestioneReceptionist(QWidget):
         except IndexError:
             print("INDEX ERROR")
 
-
     def rimuovi_receptionist(self):
-        # Ottieni l'indice dell'elemento selezionato nella lista dei receptionist
-        selected_index = self.lista_receptionist.selectedIndexes()[0]
+        selected_indexes = self.lista_receptionist.selectedIndexes()
 
-        if selected_index.isValid():
-            # Identifica il receptionist corrispondente all'elemento selezionato
-            selected_receptionist = self.receptionists[selected_index.row()]
+        if not selected_indexes:
+            QMessageBox.critical(self, 'Errore', 'Seleziona un receptionist da rimuovere', QMessageBox.Ok,
+                                 QMessageBox.Ok)
+            return
 
-            # Rimuovi il receptionist dai dati su disco
-            if selected_receptionist:
-                if selected_receptionist.rimuovi_dipendente():
-                    # Rimozione riuscita, aggiorna l'interfaccia utente
-                    self.update_ui()
-                else:
-                    # Rimozione fallita, mostra un messaggio di errore
-                    QMessageBox.critical(self, 'Errore', 'Impossibile rimuovere il receptionist.', QMessageBox.Ok,
-                                         QMessageBox.Ok)
+        selected_index = selected_indexes[0]
+        selected_receptionist = self.receptionists[selected_index.row()]
+
+        if selected_receptionist:
+            success = selected_receptionist.rimuovi_dipendente()
+            if success:
+                self.update_ui()
+            else:
+                QMessageBox.critical(self, 'Errore', 'Impossibile rimuovere il receptionist.', QMessageBox.Ok,
+                                     QMessageBox.Ok)
+        else:
+            QMessageBox.critical(self, 'Errore', 'Receptionist non trovato.', QMessageBox.Ok, QMessageBox.Ok)

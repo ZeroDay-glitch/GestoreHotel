@@ -11,19 +11,12 @@ class ServizioInCamera(Servizio):
         self.addetto_servizi = addettoServizi
         self.note = note
 
-        # Carica i servizi esistenti, aggiungi questo servizio e salva
-        servizi_in_camera = self.carica_servizi()
-        servizi_in_camera[self.tipo_servizio] = self
-        self.salva_servizi(servizi_in_camera)
-
-    def carica_servizi(self):
+        servizi_in_camera = {}
         if os.path.isfile('Dati/ServiziInCamera.pickle'):
             with open('Dati/ServiziInCamera.pickle', 'rb') as f:
-                return pickle.load(f)
-        return {}
-
-    def salva_servizi(self, servizi_in_camera):
-        with open('Dati/ServiziInCamera.pickle', 'wb') as f:
+                servizi_in_camera = pickle.load(f)
+        servizi_in_camera[tipo_servizio] = self
+        with open('Dati/Camere.pickle', 'wb') as f:
             pickle.dump(servizi_in_camera, f, pickle.HIGHEST_PROTOCOL)
 
     def get_info_servizio_in_camera(self):
@@ -36,13 +29,7 @@ class ServizioInCamera(Servizio):
         return info
 
     def assegna_servizio(self):
-        # Implementazione specifica: collega il servizio alla camera e all'addettoServizi
         pass
 
     def rimuovi_servizio(self):
-        # Implementazione specifica: rimuove il servizio dalla camera e dall'addettoServizi
-        servizi_in_camera = self.carica_servizi()
-        if self.tipo_servizio in servizi_in_camera:
-            del servizi_in_camera[self.tipo_servizio]
-            self.salva_servizi(servizi_in_camera)
         pass
