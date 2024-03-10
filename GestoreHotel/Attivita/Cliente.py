@@ -68,7 +68,6 @@ class Cliente:
             return None
 
     def rimuovi_cliente(self):
-        print("Prima della cancellazione")
         if os.path.isfile('Dati/Clienti.pickle'):
             with open('Dati/Clienti.pickle', 'rb') as f:
                 clienti = pickle.load(f)
