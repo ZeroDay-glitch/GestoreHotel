@@ -3,7 +3,7 @@ import pickle
 import datetime
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QComboBox, QCalendarWidget, QSpinBox, QPushButton, \
     QMessageBox, QCompleter
-from PyQt5.QtCore import QDateTime, Qt
+from PyQt5.QtCore import QDateTime, Qt, QDate
 
 from Attivita.Prenotazione import Prenotazione
 
@@ -21,23 +21,23 @@ class VistaAggiungiPrenotazione(QWidget):
 
     def setup_ui(self):
         self.clienti_combobox = QComboBox(self)
-        self.clienti_combobox.setStyleSheet("background-color: white; color: black;")  # Stilizza QComboBox
+        self.clienti_combobox.setStyleSheet("background-color: white; color: black;")
         self.populate_clienti_combobox()
         self.v_layout.addWidget(self.clienti_combobox)
 
         self.add_label_with_style("Data di Inizio")
         self.data_inizio_calendar = QCalendarWidget()
-        self.data_inizio_calendar.setStyleSheet("background-color: #C3D4C7;")  # Stilizza QCalendarWidget
+        self.data_inizio_calendar.setStyleSheet("background-color: #C3D4C7;")
         self.v_layout.addWidget(self.data_inizio_calendar)
 
         self.add_label_with_style("Data di Fine")
         self.data_fine_calendar = QCalendarWidget()
-        self.data_fine_calendar.setStyleSheet("background-color: #C3D4C7;")  # Stilizza QCalendarWidget
+        self.data_fine_calendar.setStyleSheet("background-color: #C3D4C7;")
         self.v_layout.addWidget(self.data_fine_calendar)
 
         self.add_label_with_style("Numero di Ospiti")
         self.num_ospiti_spinbox = QSpinBox()
-        self.num_ospiti_spinbox.setStyleSheet("background-color: white; color: black;")  # Stilizza QSpinBox
+        self.num_ospiti_spinbox.setStyleSheet("background-color: white; color: black;")
         self.num_ospiti_spinbox.setMinimum(1)
         self.v_layout.addWidget(self.num_ospiti_spinbox)
 
@@ -111,14 +111,22 @@ class VistaAggiungiPrenotazione(QWidget):
         data_inizio = self.data_inizio_calendar.selectedDate()
         data_fine = self.data_fine_calendar.selectedDate()
 
-        data_inizio = datetime.datetime(data_inizio.year(), data_inizio.month(), data_inizio.day())
-        data_fine = datetime.datetime(data_fine.year(), data_fine.month(), data_fine.day())
-
-        numero_ospiti = self.num_ospiti_spinbox.value()
-
-        if not cliente_selezionato or not data_inizio or not data_fine:
+        if not data_inizio or not data_fine:
             QMessageBox.critical(self, 'Errore', 'Compila tutti i campi obbligatori', QMessageBox.Ok, QMessageBox.Ok)
             return
+
+        if data_fine <= data_inizio:
+            QMessageBox.critical(self, 'Errore', 'La data di fine deve essere successiva alla data di inizio',
+                                 QMessageBox.Ok, QMessageBox.Ok)
+            return
+
+        oggi = QDate.currentDate()
+        if data_inizio <= oggi.addDays(1):
+            QMessageBox.critical(self, 'Errore', 'La prenotazione deve essere effettuata almeno un giorno di anticipo',
+                                 QMessageBox.Ok, QMessageBox.Ok)
+            return
+
+        numero_ospiti = self.num_ospiti_spinbox.value()
 
         servizi_selezionati = []
 

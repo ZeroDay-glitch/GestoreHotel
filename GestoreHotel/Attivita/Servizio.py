@@ -15,17 +15,14 @@ class Servizio:
 
     @abstractmethod
     def ricerca_servizio(self):
-        # Ricerca il servizio
         pass
 
     @abstractmethod
     def assegna_servizio(self):
-        # Implementa l'assegnamento del servizio alla camera e all'addettoServizi
         pass
 
     @abstractmethod
     def rimuovi_servizio(self):
-        # Implementa la rimozione del servizio dalla camera e dall'addettoServizi
         pass
 
 

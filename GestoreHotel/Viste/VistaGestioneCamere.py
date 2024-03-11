@@ -11,7 +11,7 @@ class VistaGestioneCamere(QWidget):
         super().__init__()
         self.camere = Camera.carica_camere()
         if not self.camere:
-            self.camere = Camera.crea_camere_iniziali()
+            self.camere = Camera.crea_camere()
 
         self.pulsanti_camera = {}
 

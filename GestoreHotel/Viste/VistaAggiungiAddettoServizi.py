@@ -84,7 +84,6 @@ class VistaAggiungiAddettoServizi(QWidget):
             cellulare = self.qlines["cellulare"].text()
             password = self.qlines["password"].text()
 
-            # Verifica che tutti i campi obbligatori siano stati compilati
             if not codice or not nome or not cognome or not data_nascita or not luogo_nascita or not cellulare:
                 QMessageBox.critical(self, 'Errore', 'Compila tutti i campi obbligatori',
                                      QMessageBox.Ok, QMessageBox.Ok)

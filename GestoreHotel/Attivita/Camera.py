@@ -43,7 +43,7 @@ class Camera:
             pickle.dump(camere, f, pickle.HIGHEST_PROTOCOL)
 
     @classmethod
-    def crea_camere_iniziali(cls):
+    def crea_camere(cls):
         camere = {
             101: Camera(101, "Standard", 1, 100),
             102: Camera(102, "Standard", 2, 150),

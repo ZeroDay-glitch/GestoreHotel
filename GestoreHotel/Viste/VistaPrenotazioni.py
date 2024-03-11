@@ -14,7 +14,7 @@ class VistaPrenotazione(QWidget):
         def add_label(text):
             label = QLabel(text)
             label.setFont(font)
-            label.setStyleSheet("color: white;")  # Aggiunta del colore bianco per il testo
+            label.setStyleSheet("color: white;")
             self.layout.addWidget(label)
 
         add_label(f"Cliente: {prenotazione.cliente.nome} {prenotazione.cliente.cognome}")
@@ -37,18 +37,18 @@ class VistaPrenotazione(QWidget):
                 background-color: #C3D4C7;
                 color: black;
                 border-radius: 10px;
-                padding: 10px 15px; /* Aggiunto padding più generoso */
-                font-size: 16px; /* Aumentato la dimensione del font */
-                border: 2px solid #555; /* Aggiunto bordo per coerenza */
-                transition: background-color 0.3s, color 0.3s; /* Effetto transizione più fluido */
+                padding: 10px 15px; 
+                font-size: 16px; 
+                border: 2px solid #555;
+                transition: background-color 0.3s, color 0.3s; 
             }
             QPushButton:hover {
                 background-color: #707070;
                 color: white;
-                border: 2px solid #707070; /* Bordo che cambia con il colore di sfondo */
+                border: 2px solid #707070; 
             }
             QPushButton:pressed {
-                background-color: #505050; /* Leggermente più scuro al click */
+                background-color: #505050; 
             }
         """)
         self.layout.addWidget(btn_close)

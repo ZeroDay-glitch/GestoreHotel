@@ -87,8 +87,9 @@ class VistaAggiungiCliente(QWidget):
             documento = self.qlines["documento"].text()
             email = self.qlines["email"].text()
 
-            if not codice or not nome or not cognome or not data_nascita or not luogo_nascita or not cellulare:
-                QMessageBox.critical(self, 'Errore', 'Compila tutti i campi obbligatori',
+            if (not codice or not nome or not cognome or not data_nascita or not luogo_nascita or not cellulare or not
+                codice_fiscale or not documento or not email):
+                QMessageBox.critical(self, 'Errore', 'Compila tutti i campi ',
                                      QMessageBox.Ok, QMessageBox.Ok)
                 return
 

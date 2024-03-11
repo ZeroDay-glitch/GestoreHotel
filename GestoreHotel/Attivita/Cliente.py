@@ -72,12 +72,9 @@ class Cliente:
             with open('Dati/Clienti.pickle', 'rb') as f:
                 clienti = pickle.load(f)
 
-            # Verifica se il cliente è presente nel dizionario
             if self.codice in clienti:
-                # Rimuovi il cliente corrente dal dizionario
                 del clienti[self.codice]
 
-                # Sovrascrivi l'intero dizionario di clienti nel file
                 with open('Dati/Clienti.pickle', 'wb') as f:
                     pickle.dump(clienti, f, pickle.HIGHEST_PROTOCOL)
 

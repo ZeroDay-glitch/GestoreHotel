@@ -18,7 +18,7 @@ class Assegnamento:
         assegnamenti[codice] = self
         with open('Dati/Assegnamenti.pickle', 'wb') as f:
             pickle.dump(assegnamenti, f, pickle.HIGHEST_PROTOCOL)
-        print(f"Assegnamento salvato: {self.get_info_assegnamento()}")  # Aggiungi per debug
+        print(f"Assegnamento salvato: {self.get_info_assegnamento()}") #debug
 
     def get_info_assegnamento(self):
         return {
@@ -65,6 +65,3 @@ class Assegnamento:
             return True
         return False
 
-    def associa_camera(self, camera):
-        self.camera = camera
-        # Aggiungi qui la logica per salvare l'assegnamento aggiornato nel tuo file di dati, se necessario.

@@ -19,7 +19,7 @@ class Receptionist(Dipendente):
             pickle.dump(receptionists, f, pickle.HIGHEST_PROTOCOL)
 
     def get_info_receptionist(self):
-        info = self.get_info_dipendente()  # Ottiene le informazioni di base da Dipendente
+        info = self.get_info_dipendente()
         info.update({
             "lingue": self.lingue,
             "prenotazioni": self.prenotazioni

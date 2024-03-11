@@ -121,7 +121,7 @@ class VistaGestionePrenotazione(QWidget):
             return
 
         selected_index = selected_indexes[0]
-        codice_prenotazione = self.extract_code(selected_index.data())  # Estrai il codice dalla stringa
+        codice_prenotazione = self.extract_code(selected_index.data())
 
         if os.path.isfile('Dati/Prenotazioni.pickle'):
             with open('Dati/Prenotazioni.pickle', 'rb') as f:

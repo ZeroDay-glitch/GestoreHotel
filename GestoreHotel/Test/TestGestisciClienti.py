@@ -11,14 +11,14 @@ class TestGestioneClienti(unittest.TestCase):
 
     def setUp(self):
 
-        self.cellulare_cliente = "1234567890"
-        self.codice_cliente = "CL123"
-        self.codice_fiscale_cliente = "ABCDEF12G34H567I"
+        self.cellulare_cliente = "333333333"
+        self.codice_cliente = "abc123"
+        self.codice_fiscale_cliente = "abcd1234"
         self.cognome_cliente = "Rossi"
         self.data_nascita_cliente = datetime(1990, 1, 1)
-        self.documento_cliente = "123456789"
-        self.email_cliente = "rossi@example.com"
-        self.luogo_nascita_cliente = "Roma"
+        self.documento_cliente = "carta identita"
+        self.email_cliente = "mario_rossi@gmail.com"
+        self.luogo_nascita_cliente = "Pavia"
         self.nome_cliente = "Mario"
 
         self.cliente = Cliente(self.cellulare_cliente, self.codice_cliente, self.codice_fiscale_cliente,
@@ -50,14 +50,14 @@ class TestGestionePrenotazioni(unittest.TestCase):
 
     def setUp(self):
 
-        self.cellulare_cliente = "1234567890"
-        self.codice_cliente = "CL123"
-        self.codice_fiscale_cliente = "ABCDEF12G34H567I"
+        self.cellulare_cliente = "333333333"
+        self.codice_cliente = "abc123"
+        self.codice_fiscale_cliente = "abcd1234"
         self.cognome_cliente = "Rossi"
         self.data_nascita_cliente = datetime(1990, 1, 1)
-        self.documento_cliente = "123456789"
-        self.email_cliente = "rossi@example.com"
-        self.luogo_nascita_cliente = "Roma"
+        self.documento_cliente = "carta identita"
+        self.email_cliente = "mario_rossi@gmail.com"
+        self.luogo_nascita_cliente = "Pavia"
         self.nome_cliente = "Mario"
 
         self.cliente = Cliente(self.cellulare_cliente, self.codice_cliente, self.codice_fiscale_cliente,
@@ -65,15 +65,15 @@ class TestGestionePrenotazioni(unittest.TestCase):
                                 self.email_cliente, self.luogo_nascita_cliente, self.nome_cliente)
 
     def test_aggiungi_prenotazione(self):
-
         data_ora_inizio = datetime.now()
         data_ora_fine = datetime.now() + timedelta(days=1)
         numero_ospiti = 2
         receptionist = "Giovanni"
+        servizi = []
 
-        codice_prenotazione = "PR123"
+        codice_prenotazione = 123
         prenotazione = Prenotazione(self.cliente, codice_prenotazione, data_ora_inizio, data_ora_fine,
-                                    numero_ospiti, receptionist)
+                                    numero_ospiti, receptionist, servizi)
 
         prenotazioni = self.carica_prenotazioni_da_file()
         self.assertIsNotNone(prenotazioni)
@@ -86,7 +86,7 @@ class TestGestionePrenotazioni(unittest.TestCase):
         numero_ospiti = 2
         receptionist = "Giovanni"
 
-        codice_prenotazione = "PR123"
+        codice_prenotazione = 123
         prenotazione = Prenotazione(self.cliente, codice_prenotazione, data_ora_inizio, data_ora_fine,
                                     numero_ospiti, receptionist)
 
@@ -103,7 +103,7 @@ class TestGestionePrenotazioni(unittest.TestCase):
         numero_ospiti = 2
         receptionist = "Giovanni"
 
-        codice_prenotazione = "PR456"
+        codice_prenotazione = 456
         prenotazione_scaduta = Prenotazione(self.cliente, codice_prenotazione, data_ora_inizio, data_ora_fine,
                                             numero_ospiti, receptionist)
 
